@@ -1,10 +1,10 @@
 import sys
-import numpy
+from PyQt5.QtCore import QFile, Qt
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGridLayout, QGraphicsView
+from PyQt5.QtGui import QFont
+from PyQt5 import QtCore, QtWidgets
+from network_display import NetworkDisplay
 import math
-import matplotlib
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QVBoxLayout, QWidget, QPushButton
-from PyQt5.QtCore import Qt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 #Variables
 windowHeight = 1080
@@ -15,30 +15,107 @@ class Window(QMainWindow):
         super().__init__() #initializing parent object
     
         self.setWindowTitle("Wireless Sensor Network") # Setting window title
-
-        self.setGeometry(0,0,windowWidth,windowHeight) # Defining window position and resolution
+        self.setStyleSheet("background:#252525") # Changing the background color
+        self.setGeometry(320, 180, windowWidth, windowHeight) # Defining window position and resolution
 
         self.central_widget = QWidget() # Creating central widget
-        self.setCentralWidget(self.central_widget)
+        self.setCentralWidget(self.central_widget) # Setting central widget
 
-        layout = QVBoxLayout()
-
-        #Creating slider for the sensor number
-        self.sensor_slider = QSlider(Qt.Horizontal)
-        self.sensor_slider.setMinimum(1)
-        self.sensor_slider.setMaximum(20)
-        self.sensor_slider.setValue(10)
-        self.sensor_slider.setTickInterval(1)
-        self.sensor_slider.setTickPosition(QSlider.TicksBelow)
+        #Loading the styles file
+        style_file = QFile("styles.css")
+        style_file.open(QFile.ReadOnly | QFile.Text)
+        stylesheet = style_file.readAll()
+        style_file.close()
         
-        self.sensor_slider.setFixedWidth(math.floor(0.2*windowWidth))
-        self.sensor_slider.setFixedHeight(math.floor(0.2*windowHeight))
-
-        self.sensor_slider.move(0, 0)
+        # Creating widgets
+        self.create_widgets(stylesheet)
         
-        layout.addWidget(self.sensor_slider)
-        self.central_widget.setLayout(layout)
+        # Rysowanie sieci sensorycznej
+        self.draw_network()
 
+        # Tworzenie obiektu NetworkDisplay i przekazanie QGraphicsView
+        self.network_display = NetworkDisplay(self.graphicsView)
+
+    def create_widgets(self, stylesheet):
+        #Creating app name widget
+        self.app_name = QLabel(self.central_widget)
+        self.app_name.setText("Wireless Sensor Network (WSN)")
+        self.app_name.setFont(QFont("Roboto", 32))
+        self.app_name.setMaximumHeight(100) # Ustawienie maksymalnej wysokości na 100 pikseli
+
+        self.centralwidget = QtWidgets.QWidget(self)
+        self.centralwidget.setObjectName("centralwidget")
+
+        #App name
+        self.appName = QLabel(self.centralwidget)
+        self.appName.setText("Wireless Sensor Network (WSN)")
+        self.appName.setFont(QFont("Arial", 18))
+        self.appName.setGeometry(QtCore.QRect(30, 20, 351, 61))
+        self.appName.setObjectName("appName")
+        self.appName.setStyleSheet(str(stylesheet, encoding='utf-8'))
+
+        #Reset sensor position
+        self.pushButton_2 = QPushButton("Reset", self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(110, 110, 161, 51))
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_2.setStyleSheet(str(stylesheet, encoding='utf-8'))
+        self.setCentralWidget(self.centralwidget)
+
+        # Tworzenie widoku graficznego i sceny
+        self.graphicsView = QGraphicsView(self.centralwidget)
+        self.graphicsView.setGeometry(QtCore.QRect(900, 40, 1000, 1000))
+
+        #Star button
+        self.startButton = QPushButton("Start Simulation", self.centralwidget)
+        self.startButton.setGeometry(QtCore.QRect(40, 680, 321, 141))
+        self.startButton.setStyleSheet(str(stylesheet, encoding='utf-8'))
+        
+        #Number slider
+        self.numberSlider = QSlider(Qt.Horizontal, self.centralwidget)
+        self.numberSlider.setGeometry(QtCore.QRect(20, 290, 311, 51))
+        self.numberSlider.setMinimum(1)
+        self.numberSlider.setMaximum(30)
+        self.numberSlider.setTickInterval(1)
+        self.numberSlider.setStyleSheet(str(stylesheet, encoding='utf-8'))
+
+        #Number slider name
+        self.numberSliderName = QLabel(self.centralwidget)
+        self.numberSliderName.setGeometry(QtCore.QRect(20, 220, 351, 61))
+        self.numberSliderName.setText("Number of sensors")
+        self.numberSliderName.setFont(QFont("Arial", 24))
+        self.numberSliderName.setStyleSheet(str(stylesheet, encoding='utf-8'))
+
+        #Number slider num
+        self.numberSliderNum = QLabel(self.centralwidget)
+        self.numberSliderNum.setText("0")
+        self.numberSliderNum.setFont(QFont("Arial", 32))
+        self.numberSliderNum.setGeometry(QtCore.QRect(110, 340, 141, 61))
+        self.numberSliderNum.setStyleSheet(str(stylesheet, encoding='utf-8'))
+
+        #Range slider
+        self.rangeSlider = QSlider(Qt.Horizontal, self.centralwidget)
+        self.rangeSlider.setGeometry(QtCore.QRect(30, 520, 331, 51))
+        self.rangeSlider.setMinimum(1)
+        self.rangeSlider.setMaximum(10)
+        self.rangeSlider.setTickInterval(1)
+        self.rangeSlider.setStyleSheet(str(stylesheet, encoding='utf-8'))
+
+        #Range slider name
+        self.rangeSliderName = QLabel(self.centralwidget)
+        self.rangeSliderName.setGeometry(QtCore.QRect(30, 430, 351, 61))
+        self.rangeSliderName.setText("Sensor range")
+        self.rangeSliderName.setFont(QFont("Arial", 24))
+        self.rangeSliderName.setStyleSheet(str(stylesheet, encoding='utf-8'))
+
+        #Range slider num
+        self.rangeSliderNum = QLabel(self.centralwidget)
+        self.rangeSliderNum.setGeometry(QtCore.QRect(120, 580, 141, 61))
+        self.rangeSliderNum.setText("0")
+        self.rangeSliderNum.setFont(QFont("Arial", 32))
+        self.rangeSliderNum.setStyleSheet(str(stylesheet, encoding='utf-8'))
+
+    def draw_network(self):
+        pass
 
 
 
