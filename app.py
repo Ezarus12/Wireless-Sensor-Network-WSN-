@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtCore import QFile, Qt
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGridLayout, QGraphicsView
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView
 from PyQt5.QtGui import QFont
 from PyQt5 import QtCore, QtWidgets
 from network_display import NetworkDisplay
@@ -35,11 +35,11 @@ class Window(QMainWindow):
 
         # Tworzenie obiektu NetworkDisplay i przekazanie QGraphicsView
         self.network_display = NetworkDisplay(self.graphicsView)
-        self.resetButton.clicked.connect(self.network_display.fun)
+        self.resetButton.clicked.connect(lambda: self.network_display.fun(self.numberSlider.value(), self.rangeSlider.value()))
 
         self.numberSlider.valueChanged.connect(lambda value: self.update_label(self.numberSliderNum, value))
         self.rangeSlider.valueChanged.connect(lambda value: self.update_label(self.rangeSliderNum, value))
-
+        
     def create_widgets(self, stylesheet):
         #Creating app name widget
         self.app_name = QLabel(self.central_widget)
@@ -78,8 +78,8 @@ class Window(QMainWindow):
         #Number slider
         self.numberSlider = QSlider(Qt.Horizontal, self.centralwidget)
         self.numberSlider.setGeometry(QtCore.QRect(20, 290, 311, 51))
-        self.numberSlider.setMinimum(1)
-        self.numberSlider.setMaximum(30)
+        self.numberSlider.setMinimum(0)
+        self.numberSlider.setMaximum(60)
         self.numberSlider.setTickInterval(1)
         self.numberSlider.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
@@ -101,7 +101,7 @@ class Window(QMainWindow):
         self.rangeSlider = QSlider(Qt.Horizontal, self.centralwidget)
         self.rangeSlider.setGeometry(QtCore.QRect(30, 520, 331, 51))
         self.rangeSlider.setMinimum(1)
-        self.rangeSlider.setMaximum(10)
+        self.rangeSlider.setMaximum(25)
         self.rangeSlider.setTickInterval(1)
         self.rangeSlider.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
