@@ -9,13 +9,15 @@ class NetworkDisplay:
         graphics_view.setScene(self.scene)
         self.draw_network()
 
-    def draw_network(self):
+    def draw_network(self, num_sensors=40):  # Dodaj argument domyślny num_sensors
+        self.scene.clear()  # Wyczyść scenę przed ponownym narysowaniem sieci
+        
         # Reprezentacja terenu
         terrain_rect = self.scene.addRect(0, 0, 990, 990)  #Terain size fitted to the widget size
         terrain_rect.setBrush(QBrush(QColor(105, 105, 105)))  #Terrain color
 
         # Reprezentacja sensora
-        for i in range(40):
+        for i in range(num_sensors):  # Użyj num_sensors jako liczby sensorów
             sensorSize = 10
             sensorRange = 100
             sensorX = random.randint(math.floor(sensorRange*0.5),math.floor(990-sensorRange*0.5))
@@ -29,3 +31,9 @@ class NetworkDisplay:
             
             self.scene.addItem(range_circle)
             self.scene.addItem(sensor)
+
+    def fun(self):
+        self.draw_network()
+
+   
+        

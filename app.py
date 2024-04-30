@@ -35,6 +35,10 @@ class Window(QMainWindow):
 
         # Tworzenie obiektu NetworkDisplay i przekazanie QGraphicsView
         self.network_display = NetworkDisplay(self.graphicsView)
+        self.resetButton.clicked.connect(self.network_display.fun)
+
+        self.numberSlider.valueChanged.connect(lambda value: self.update_label(self.numberSliderNum, value))
+        self.rangeSlider.valueChanged.connect(lambda value: self.update_label(self.rangeSliderNum, value))
 
     def create_widgets(self, stylesheet):
         #Creating app name widget
@@ -55,11 +59,12 @@ class Window(QMainWindow):
         self.appName.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
         #Reset sensor position
-        self.pushButton_2 = QPushButton("Reset", self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(110, 110, 161, 51))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_2.setStyleSheet(str(stylesheet, encoding='utf-8'))
+        self.resetButton = QPushButton("Reset", self.centralwidget)
+        self.resetButton.setGeometry(QtCore.QRect(110, 110, 161, 51))
+        self.resetButton.setObjectName("pushButton_2")
+        self.resetButton.setStyleSheet(str(stylesheet, encoding='utf-8'))
         self.setCentralWidget(self.centralwidget)
+       
 
         # Tworzenie widoku graficznego i sceny
         self.graphicsView = QGraphicsView(self.centralwidget)
@@ -116,6 +121,10 @@ class Window(QMainWindow):
 
     def draw_network(self):
         pass
+
+    def update_label(self, label_widget, value):
+        # Aktualizuj etykietę na podstawie przekazanego widgetu i wartości suwaka
+        label_widget.setText(str(value))
 
 
 
