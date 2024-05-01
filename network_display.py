@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsEllipseItem
-from PyQt5.QtGui import QBrush, QColor
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsEllipseItem, QGraphicsPixmapItem
+from PyQt5.QtGui import QBrush, QColor, QPixmap
 import random
 import math
 
@@ -9,13 +9,18 @@ class NetworkDisplay:
         self.sensorNum = 40
         self.sensorRange = 100
         graphics_view.setScene(self.scene)
+        # Load terrain image
+        self.terrain_image = QPixmap("terrain_image.jpg")
+        if self.terrain_image.isNull():
+            print("Error: Failed to load terrain image")
+            return
         self.draw_network()
         
 
     def draw_network(self):
-        # Reprezentacja terenu
-        terrain_rect = self.scene.addRect(0, 0, 990, 990)  #Terain size fitted to the widget size
-        terrain_rect.setBrush(QBrush(QColor(105, 105, 105)))  #Terrain color
+        # Create a QGraphicsPixmapItem from the QPixmap
+        terrain_pixmap_item = QGraphicsPixmapItem(self.terrain_image)
+        self.scene.addItem(terrain_pixmap_item)
 
         # Reprezentacja sensora
         for i in range(self.sensorNum):
@@ -23,7 +28,7 @@ class NetworkDisplay:
             sensorX = random.randint(math.floor(self.sensorRange*0.5),math.floor(990-self.sensorRange*0.5))
             sensorY = random.randint(math.floor(self.sensorRange*0.5),math.floor(990-self.sensorRange*0.5))
             sensor = QGraphicsEllipseItem(sensorX, sensorY, sensorSize, sensorSize)  #Sensor position and size
-            sensor.setBrush(QBrush(QColor(20, 20, 20)))  #Sensor color
+            sensor.setBrush(QBrush(QColor(14, 236, 210)))  #Sensor color
 
             # Reprezentacja zasięgu sensora
             range_circle = QGraphicsEllipseItem(sensorX + (0.5*sensorSize) - (0.5*self.sensorRange), sensorY + (0.5*sensorSize) - (0.5*self.sensorRange), self.sensorRange, self.sensorRange)  # Przykładowa pozycja i rozmiar zasięgu sensora
@@ -43,3 +48,9 @@ class NetworkDisplay:
         
     def set_sensorRange(self, num):
         self.sensorRange = num*10
+
+    def load_terrainImage(self, name):
+        self.terrain_image = QPixmap(name)
+        if self.terrain_image.isNull():
+            print("Error: Failed to load terrain image")
+            return

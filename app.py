@@ -36,6 +36,7 @@ class Window(QMainWindow):
         # Tworzenie obiektu NetworkDisplay i przekazanie QGraphicsView
         self.network_display = NetworkDisplay(self.graphicsView)
         self.resetButton.clicked.connect(lambda: self.network_display.fun(self.numberSlider.value(), self.rangeSlider.value()))
+        self.startButton.clicked.connect(lambda: self.network_display.load_terrainImage("lul.jpg"))
 
         self.numberSlider.valueChanged.connect(lambda value: self.update_label(self.numberSliderNum, value))
         self.rangeSlider.valueChanged.connect(lambda value: self.update_label(self.rangeSliderNum, value))
