@@ -54,14 +54,20 @@ class Window(QMainWindow):
         #App name
         self.appName = QLabel(self.centralwidget)
         self.appName.setText("Wireless Sensor Network (WSN)")
-        self.appName.setFont(QFont("Arial", 18))
-        self.appName.setGeometry(QtCore.QRect(30, 20, 351, 61))
-        self.appName.setObjectName("appName")
+        self.appName.setFont(QFont("Arial", 20))
+        self.appName.setGeometry(QtCore.QRect(30, 10, 410, 61))
         self.appName.setStyleSheet(str(stylesheet, encoding='utf-8'))
+
+        self.appName = QLabel(self.centralwidget)
+        self.appName.setText("Filip Dabrowski")
+        self.appName.setFont(QFont("Arial", 18))
+        self.appName.setGeometry(QtCore.QRect(30, 66, 351, 30))
+        self.appName.setStyleSheet(str(stylesheet, encoding='utf-8'))
+
 
         #Reset sensor position
         self.resetButton = QPushButton("Reset", self.centralwidget)
-        self.resetButton.setGeometry(QtCore.QRect(110, 110, 161, 51))
+        self.resetButton.setGeometry(QtCore.QRect(110, 120, 161, 51))
         self.resetButton.setObjectName("pushButton_2")
         self.resetButton.setStyleSheet(str(stylesheet, encoding='utf-8'))
         self.setCentralWidget(self.centralwidget)
