@@ -88,6 +88,7 @@ class Window(QMainWindow):
         self.numberSlider.setMinimum(0)
         self.numberSlider.setMaximum(60)
         self.numberSlider.setTickInterval(1)
+        self.numberSlider.setValue(30)
         self.numberSlider.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
         #Number slider name
@@ -99,7 +100,7 @@ class Window(QMainWindow):
 
         #Number slider num
         self.numberSliderNum = QLabel(self.centralwidget)
-        self.numberSliderNum.setText("0")
+        self.numberSliderNum.setText("30")
         self.numberSliderNum.setFont(QFont("Arial", 32))
         self.numberSliderNum.setGeometry(QtCore.QRect(110, 340, 141, 61))
         self.numberSliderNum.setStyleSheet(str(stylesheet, encoding='utf-8'))
@@ -110,6 +111,7 @@ class Window(QMainWindow):
         self.rangeSlider.setMinimum(1)
         self.rangeSlider.setMaximum(25)
         self.rangeSlider.setTickInterval(1)
+        self.rangeSlider.setValue(10)
         self.rangeSlider.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
         #Range slider name
@@ -122,7 +124,7 @@ class Window(QMainWindow):
         #Range slider num
         self.rangeSliderNum = QLabel(self.centralwidget)
         self.rangeSliderNum.setGeometry(QtCore.QRect(120, 580, 141, 61))
-        self.rangeSliderNum.setText("0")
+        self.rangeSliderNum.setText("10")
         self.rangeSliderNum.setFont(QFont("Arial", 32))
         self.rangeSliderNum.setStyleSheet(str(stylesheet, encoding='utf-8'))
 

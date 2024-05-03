@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QGraphicsScene, QGraphicsEllipseItem, QGraphicsPixma
 from PyQt5.QtGui import QBrush, QColor, QPixmap
 import random
 import math
+from sensor import Sensor
 
 class NetworkDisplay:
     def __init__(self, graphics_view):
@@ -22,20 +23,23 @@ class NetworkDisplay:
         terrain_pixmap_item = QGraphicsPixmapItem(self.terrain_image)
         self.scene.addItem(terrain_pixmap_item)
 
-        # Reprezentacja sensora
+        # Representation of sensors
+        sensors = []
         for i in range(self.sensorNum):
             sensorSize = 10
-            sensorX = random.randint(math.floor(self.sensorRange*0.5),math.floor(990-self.sensorRange*0.5))
-            sensorY = random.randint(math.floor(self.sensorRange*0.5),math.floor(990-self.sensorRange*0.5))
-            sensor = QGraphicsEllipseItem(sensorX, sensorY, sensorSize, sensorSize)  #Sensor position and size
-            sensor.setBrush(QBrush(QColor(14, 236, 210)))  #Sensor color
-
-            # Reprezentacja zasięgu sensora
-            range_circle = QGraphicsEllipseItem(sensorX + (0.5*sensorSize) - (0.5*self.sensorRange), sensorY + (0.5*sensorSize) - (0.5*self.sensorRange), self.sensorRange, self.sensorRange)  # Przykładowa pozycja i rozmiar zasięgu sensora
-            range_circle.setBrush(QBrush(QColor(30, 119, 109, 50)))
+            sensorX = random.randint(math.floor(self.sensorRange*0.5), math.floor(990-self.sensorRange*0.5))
+            sensorY = random.randint(math.floor(self.sensorRange*0.5), math.floor(990-self.sensorRange*0.5))
+            sensor = Sensor(sensorX, sensorY, sensorSize, self.sensorRange)  # Sensor position, size, and range
             
-            self.scene.addItem(range_circle)
+            range_circle = sensor.draw_range()  # Draw the sensor range
+
             self.scene.addItem(sensor)
+            self.scene.addItem(range_circle)
+            sensors.append(sensor)
+
+        for i, sensor in enumerate(sensors):
+            print("Sensor ", i, " position: ", sensor.xPos, ", ", sensor.yPos)
+            
 
     def fun(self, num, range):
         self.scene.clear() #Clearing the scene of all the previous sensor and ranges
