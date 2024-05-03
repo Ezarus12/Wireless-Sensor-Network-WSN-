@@ -37,9 +37,14 @@ class NetworkDisplay:
             self.scene.addItem(range_circle)
             sensors.append(sensor)
 
+        print("Bliskosb:")
         for i, sensor in enumerate(sensors):
-            print("Sensor ", i, " position: ", sensor.xPos, ", ", sensor.yPos)
-            
+            for j, other_sensor in enumerate(sensors):
+                if i != j:  # Avoid comparing a sensor with itself
+                    distance = math.sqrt(((sensor.xPos - other_sensor.xPos) ** 2) + ((sensor.yPos - other_sensor.yPos) ** 2)) #Caluclating the distance from pythagorean theorem
+                    if distance <= (self.sensorRange / 2): #Distance is smaller than the radius
+                        print("Sensor", i, "and Sensor", sensors.index(other_sensor), "are within range") 
+                        print("Distance: ", distance)     
 
     def fun(self, num, range):
         self.scene.clear() #Clearing the scene of all the previous sensor and ranges
