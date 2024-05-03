@@ -11,6 +11,10 @@ class Sensor(QGraphicsEllipseItem):
         self.setBrush(QBrush(QColor(14, 236, 210)))  # Sensor color
 
     def draw_range(self):
-        range_circle = QGraphicsEllipseItem(self.xPos + (0.5*self.rect().width()) - (0.5*self.range), self.yPos + (0.5*self.rect().height()) - (0.5*self.range), self.range, self.range)
-        range_circle.setBrush(QBrush(QColor(30, 119, 109, 50)))
-        return range_circle
+        self.range_area = QGraphicsEllipseItem(self.xPos + (0.5*self.rect().width()) - (0.5*self.range), self.yPos + (0.5*self.rect().height()) - (0.5*self.range), self.range, self.range)
+        self.range_area.setBrush(QBrush(QColor(32, 179, 162, 50)))
+        return 
+
+    def change_color(self):
+        self.setBrush(QBrush(QColor(105, 105, 105)))  # Sensor color
+        self.range_area.setBrush(QBrush(QColor(3, 57, 51, 50)))

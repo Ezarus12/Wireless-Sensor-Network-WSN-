@@ -30,13 +30,14 @@ class Window(QMainWindow):
         # Creating widgets
         self.create_widgets(stylesheet)
         
-        # Rysowanie sieci sensorycznej
-        self.draw_network()
-
         # Tworzenie obiektu NetworkDisplay i przekazanie QGraphicsView
         self.network_display = NetworkDisplay(self.graphicsView)
+
+        # Rysowanie sieci sensorycznej
+        self.draw_network()
+        
         self.resetButton.clicked.connect(lambda: self.network_display.fun(self.numberSlider.value(), self.rangeSlider.value()))
-        self.startButton.clicked.connect(lambda: self.network_display.load_terrainImage("lul.jpg"))
+        self.resetButton.clicked.connect(lambda: self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors))
 
         self.numberSlider.valueChanged.connect(lambda value: self.update_label(self.numberSliderNum, value))
         self.rangeSlider.valueChanged.connect(lambda value: self.update_label(self.rangeSliderNum, value))
@@ -58,11 +59,12 @@ class Window(QMainWindow):
         self.appName.setGeometry(QtCore.QRect(30, 10, 410, 61))
         self.appName.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
-        self.appName = QLabel(self.centralwidget)
-        self.appName.setText("Filip Dabrowski")
-        self.appName.setFont(QFont("Arial", 18))
-        self.appName.setGeometry(QtCore.QRect(30, 66, 351, 30))
-        self.appName.setStyleSheet(str(stylesheet, encoding='utf-8'))
+        self.initals = QLabel(self.centralwidget)
+        self.initals.setText("Filip Dabrowski")
+        self.initals.setFont(QFont("Arial", 18))
+        self.initals.setGeometry(QtCore.QRect(30, 66, 351, 30))
+        self.initals.setStyleSheet(str(stylesheet, encoding='utf-8'))
+        self.initals.setStyleSheet("color: white;")
 
 
         #Reset sensor position
@@ -128,7 +130,22 @@ class Window(QMainWindow):
         self.rangeSliderNum.setFont(QFont("Arial", 32))
         self.rangeSliderNum.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
+        #Inactive sensors
+        self.inactiveSensors = QLabel(self.centralwidget)
+        self.inactiveSensors.setGeometry(QtCore.QRect(500, 80, 350, 60))
+        self.inactiveSensors.setText("Inactive Sensors:")
+        self.inactiveSensors.setFont(QFont("Arial", 24))
+        self.inactiveSensors.setStyleSheet(str(stylesheet, encoding='utf-8'))
+
+        #Inactive sensors num
+        self.inactiveSensorsNum = QLabel(self.centralwidget)
+        self.inactiveSensorsNum.setGeometry(QtCore.QRect(760, 82, 60, 60))
+        self.inactiveSensorsNum.setText("0")
+        self.inactiveSensorsNum.setFont(QFont("Arial", 24))
+        self.inactiveSensorsNum.setStyleSheet(str(stylesheet, encoding='utf-8'))
+
     def draw_network(self):
+        self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors)
         pass
 
     def update_label(self, label_widget, value):
