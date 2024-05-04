@@ -42,3 +42,7 @@ QPushButton:pressed {
     background-color: #017365;  /* Kolor tła przycisku po kliknięciu */
     color: white;
 }
+
+QAction {
+    background-color: red;
+}

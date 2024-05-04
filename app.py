@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtCore import QFile, Qt
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView, QToolBar, QAction
 from PyQt5.QtGui import QFont
 from PyQt5 import QtCore, QtWidgets
 from network_display import NetworkDisplay
@@ -23,9 +23,11 @@ class Window(QMainWindow):
 
         #Loading the styles file
         style_file = QFile("styles.css")
-        style_file.open(QFile.ReadOnly | QFile.Text)
-        stylesheet = style_file.readAll()
-        style_file.close()
+        if style_file.open(QFile.ReadOnly | QFile.Text):
+            stylesheet = style_file.readAll()
+            style_file.close()
+        else:
+            print("Failed to open styles file")
         
         # Creating widgets
         self.create_widgets(stylesheet)
@@ -35,29 +37,40 @@ class Window(QMainWindow):
 
         # Rysowanie sieci sensorycznej
         self.draw_network()
-        
+        #self.add_toolbar()
+
         self.resetButton.clicked.connect(lambda: self.network_display.fun(self.numberSlider.value(), self.rangeSlider.value()))
         self.resetButton.clicked.connect(lambda: self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors))
+        self.startButton.clicked.connect(lambda: self.network_display.nextSubset())
 
         self.numberSlider.valueChanged.connect(lambda value: self.update_label(self.numberSliderNum, value))
         self.rangeSlider.valueChanged.connect(lambda value: self.update_label(self.rangeSliderNum, value))
         
+    def add_toolbar(self):
+        toolbar = QToolBar()
+        self.addToolBar(toolbar)
+        Options = QAction("Options", self)
+        Edit = QAction("Edit", self)
+        toolbar.addAction(Options)
+        toolbar.addAction(Edit)
+
+
     def create_widgets(self, stylesheet):
         #Creating app name widget
-        self.app_name = QLabel(self.central_widget)
-        self.app_name.setText("Wireless Sensor Network (WSN)")
-        self.app_name.setFont(QFont("Roboto", 32))
-        self.app_name.setMaximumHeight(100) # Ustawienie maksymalnej wysokości na 100 pikseli
+        self.appName = QLabel(self.central_widget)
+        self.appName.setText("Wireless Sensor Network (WSN)")
+        self.appName.setFont(QFont("Roboto", 32))
+        self.appName.setMaximumHeight(100) # Ustawienie maksymalnej wysokości na 100 pikseli
 
         self.centralwidget = QtWidgets.QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
 
         #App name
-        self.appName = QLabel(self.centralwidget)
-        self.appName.setText("Wireless Sensor Network (WSN)")
-        self.appName.setFont(QFont("Arial", 20))
-        self.appName.setGeometry(QtCore.QRect(30, 10, 410, 61))
-        self.appName.setStyleSheet(str(stylesheet, encoding='utf-8'))
+        self.titleText = QLabel(self.centralwidget)
+        self.titleText.setText("Wireless Sensor Network (WSN)")
+        self.titleText.setFont(QFont("Arial", 20))
+        self.titleText.setGeometry(QtCore.QRect(30, 10, 410, 61))
+        self.titleText.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
         self.initals = QLabel(self.centralwidget)
         self.initals.setText("Filip Dabrowski")
@@ -66,7 +79,6 @@ class Window(QMainWindow):
         self.initals.setStyleSheet(str(stylesheet, encoding='utf-8'))
         self.initals.setStyleSheet("color: white;")
 
-
         #Reset sensor position
         self.resetButton = QPushButton("Reset", self.centralwidget)
         self.resetButton.setGeometry(QtCore.QRect(110, 120, 161, 51))
@@ -74,8 +86,7 @@ class Window(QMainWindow):
         self.resetButton.setStyleSheet(str(stylesheet, encoding='utf-8'))
         self.setCentralWidget(self.centralwidget)
        
-
-        # Tworzenie widoku graficznego i sceny
+        #Creating graphic view representing terrain and the sensors
         self.graphicsView = QGraphicsView(self.centralwidget)
         self.graphicsView.setGeometry(QtCore.QRect(900, 40, 1000, 1000))
 
@@ -88,7 +99,7 @@ class Window(QMainWindow):
         self.numberSlider = QSlider(Qt.Horizontal, self.centralwidget)
         self.numberSlider.setGeometry(QtCore.QRect(20, 290, 311, 51))
         self.numberSlider.setMinimum(0)
-        self.numberSlider.setMaximum(60)
+        self.numberSlider.setMaximum(150)
         self.numberSlider.setTickInterval(1)
         self.numberSlider.setValue(30)
         self.numberSlider.setStyleSheet(str(stylesheet, encoding='utf-8'))
@@ -110,9 +121,9 @@ class Window(QMainWindow):
         #Range slider
         self.rangeSlider = QSlider(Qt.Horizontal, self.centralwidget)
         self.rangeSlider.setGeometry(QtCore.QRect(30, 520, 331, 51))
-        self.rangeSlider.setMinimum(1)
-        self.rangeSlider.setMaximum(25)
-        self.rangeSlider.setTickInterval(1)
+        self.rangeSlider.setMinimum(0)
+        self.rangeSlider.setMaximum(250)
+        self.rangeSlider.setTickInterval(10)
         self.rangeSlider.setValue(10)
         self.rangeSlider.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
