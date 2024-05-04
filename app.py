@@ -122,7 +122,7 @@ class Window(QMainWindow):
         self.rangeSlider = QSlider(Qt.Horizontal, self.centralwidget)
         self.rangeSlider.setGeometry(QtCore.QRect(30, 520, 331, 51))
         self.rangeSlider.setMinimum(0)
-        self.rangeSlider.setMaximum(250)
+        self.rangeSlider.setMaximum(25)
         self.rangeSlider.setTickInterval(10)
         self.rangeSlider.setValue(10)
         self.rangeSlider.setStyleSheet(str(stylesheet, encoding='utf-8'))

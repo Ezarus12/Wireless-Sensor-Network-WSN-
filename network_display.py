@@ -50,18 +50,25 @@ class NetworkDisplay:
                     sensor.isActive = False
                     sensor.change_color_inactive()
 
-
+    #Create next subset of sensors and turn off all the sensors from the previous subset
     def nextSubset(self):
+        to_remove = []
         for sensor in self.sensors:
             if sensor.isActive:
+                print("wylaczony")
                 sensor.hasPower = False
                 sensor.change_color_off()
             else:
                 sensor.isActive = True
                 sensor.change_color_active()
-        for sensor in self.sensors:
-                if not sensor.hasPower:
-                    self.sensors.remove(sensor)
+            if not sensor.hasPower:
+                print("usuniety")
+                to_remove.append(sensor)
+
+        #Deleting dead sensors
+        for sensor in to_remove:
+            self.sensors.remove(sensor)
+
         self.createSubset()
         self.scene.update()
 
@@ -76,7 +83,7 @@ class NetworkDisplay:
         self.sensorNum = num
         
     def set_sensorRange(self, num):
-        self.sensorRange = num
+        self.sensorRange = num*10
 
     def load_terrainImage(self, name):
         self.terrain_image = QPixmap(name)
