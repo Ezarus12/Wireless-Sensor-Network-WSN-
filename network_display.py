@@ -76,7 +76,6 @@ class NetworkDisplay:
             #time.sleep(2)  # Pause for 2 seconds before the next iteration
             print("odpalone")
             self.nextSubset()
-            self.scene.update()  # Manually trigger the scene update
             QApplication.processEvents()  # Process pending GUI events
             
             

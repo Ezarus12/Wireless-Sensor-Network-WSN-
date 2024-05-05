@@ -9,6 +9,7 @@ import math
 #Variables
 windowHeight = 1080
 windowWidth = 1920
+aspectRatio = 16/9
 
 class Window(QMainWindow):
     def __init__(self):
@@ -56,13 +57,53 @@ class Window(QMainWindow):
         toolbar.addAction(Options)
         toolbar.addAction(Edit)
 
+    def resizeEvent(self, event):
+        width = event.size().width()
+        height = event.size().height()
+        #Resize terrain represenation
+        self.graphicsView.resize(math.floor(width*0.521),math.floor(height*0.926))
+        self.graphicsView.move(math.floor(width*0.47),math.floor(height*0.04))
+
+        #Resize title and intials
+        self.titleText.resize(math.floor(width*0.2), math.floor(height*0.02))
+        self.titleText.setFont(QFont("Arial", math.floor(width*0.2/21)))
+        self.titleText.move(math.floor(width*0.01),math.floor(height*0.02))
+
+        self.initials.resize(math.floor(width*0.2), math.floor(height*0.016))
+        self.initials.setFont(QFont("Arial", math.floor(width*0.2/32)))
+        self.initials.move(math.floor(width*0.01),math.floor(height*0.045))
+
+        #Resize sliders
+        self.numberSliderName.resize(math.floor(width*0.2), math.floor(height*0.023))
+        self.numberSliderName.setFont(QFont("Arial", math.floor(width*0.2/16)))
+        self.numberSliderName.move(math.floor(width*0.01),math.floor(height*0.1))
+
+        self.numberSliderNum.resize(math.floor(width*0.08), math.floor(height*0.05))
+        self.numberSliderNum.setFont(QFont("Arial", math.floor(width*0.2/16)))
+        self.numberSliderNum.move(math.floor(width*0.16),math.floor(height*0.087))
+
+        self.numberSlider.resize(math.floor(width*0.2), math.floor(height*0.04))
+        self.numberSlider.move(math.floor(width*0.01),math.floor(height*0.14))
+
+        self.rangeSliderName.resize(math.floor(width*0.2), math.floor(height*0.04))
+        self.rangeSliderName.setFont(QFont("Arial", math.floor(width*0.2/16)))
+        self.rangeSliderName.move(math.floor(width*0.01),math.floor(height*0.23))
+
+        self.rangeSliderNum.resize(math.floor(width*0.05), math.floor(height*0.05))
+        self.rangeSliderNum.setFont(QFont("Arial", math.floor(width*0.2/16)))
+        self.rangeSliderNum.move(math.floor(width*0.118),math.floor(height*0.226))
+
+        self.rangeSlider.resize(math.floor(width*0.2), math.floor(height*0.04))
+        self.rangeSlider.move(math.floor(width*0.01),math.floor(height*0.30))
+
+        print("XD")
 
     def create_widgets(self, stylesheet):
         #Creating app name widget
         self.appName = QLabel(self.central_widget)
         self.appName.setText("Wireless Sensor Network (WSN)")
         self.appName.setFont(QFont("Roboto", 32))
-        self.appName.setMaximumHeight(100) # Ustawienie maksymalnej wysokości na 100 pikseli
+        self.appName.setMaximumHeight(300) # Ustawienie maksymalnej wysokości na 100 pikseli
         
 
         self.centralwidget = QtWidgets.QWidget(self)
@@ -72,19 +113,19 @@ class Window(QMainWindow):
         self.titleText = QLabel(self.centralwidget)
         self.titleText.setText("Wireless Sensor Network (WSN)")
         self.titleText.setFont(QFont("Arial", 20))
-        self.titleText.setGeometry(QtCore.QRect(30, 10, 410, 61))
+        self.titleText.setGeometry(QtCore.QRect(20, 10, 420, 61))
         self.titleText.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
-        self.initals = QLabel(self.centralwidget)
-        self.initals.setText("Filip Dabrowski")
-        self.initals.setFont(QFont("Arial", 18))
-        self.initals.setGeometry(QtCore.QRect(30, 66, 351, 30))
-        self.initals.setStyleSheet(str(stylesheet, encoding='utf-8'))
-        self.initals.setStyleSheet("color: white;")
+        self.initials = QLabel(self.centralwidget)
+        self.initials.setText("Filip Dabrowski")
+        self.initials.setFont(QFont("Arial", 18))
+        self.initials.setGeometry(QtCore.QRect(0, 0, 360, 30))
+        self.initials.setStyleSheet(str(stylesheet, encoding='utf-8'))
+        self.initials.setStyleSheet("color: white;")
 
         #Reset sensor position
         self.resetButton = QPushButton("Reset", self.centralwidget)
-        self.resetButton.setGeometry(QtCore.QRect(110, 120, 161, 51))
+        self.resetButton.setGeometry(QtCore.QRect(110, 1000, 161, 51))
         self.resetButton.setObjectName("pushButton_2")
         self.resetButton.setStyleSheet(str(stylesheet, encoding='utf-8'))
         self.setCentralWidget(self.centralwidget)
@@ -110,16 +151,17 @@ class Window(QMainWindow):
         #Number slider name
         self.numberSliderName = QLabel(self.centralwidget)
         self.numberSliderName.setGeometry(QtCore.QRect(20, 220, 351, 61))
-        self.numberSliderName.setText("Number of sensors")
+        self.numberSliderName.setText("Number of sensors:")
         self.numberSliderName.setFont(QFont("Arial", 24))
         self.numberSliderName.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
         #Number slider num
         self.numberSliderNum = QLabel(self.centralwidget)
         self.numberSliderNum.setText("30")
-        self.numberSliderNum.setFont(QFont("Arial", 32))
+        self.numberSliderNum.setFont(QFont("Arial", 24))
         self.numberSliderNum.setGeometry(QtCore.QRect(110, 340, 141, 61))
         self.numberSliderNum.setStyleSheet(str(stylesheet, encoding='utf-8'))
+        self.numberSliderNum.setStyleSheet("color: white;")
 
         #Range slider
         self.rangeSlider = QSlider(Qt.Horizontal, self.centralwidget)
@@ -133,7 +175,7 @@ class Window(QMainWindow):
         #Range slider name
         self.rangeSliderName = QLabel(self.centralwidget)
         self.rangeSliderName.setGeometry(QtCore.QRect(30, 430, 351, 61))
-        self.rangeSliderName.setText("Sensor range")
+        self.rangeSliderName.setText("Sensor range:")
         self.rangeSliderName.setFont(QFont("Arial", 24))
         self.rangeSliderName.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
@@ -143,6 +185,7 @@ class Window(QMainWindow):
         self.rangeSliderNum.setText("10")
         self.rangeSliderNum.setFont(QFont("Arial", 32))
         self.rangeSliderNum.setStyleSheet(str(stylesheet, encoding='utf-8'))
+        self.rangeSliderNum.setStyleSheet("color: white;")
 
         #Inactive sensors
         self.inactiveSensors = QLabel(self.centralwidget)
@@ -170,19 +213,28 @@ class Window(QMainWindow):
 
     def update_label(self, label_widget, value):
         # Aktualizuj etykietę na podstawie przekazanego widgetu i wartości suwaka
+        self.progress_bar.setValue(100)
         label_widget.setText(str(value))
     
     def decreaseBatteryLife(self):
         # Decrease battery life by 10% every 200 milliseconds
         if self.progress_bar.value() > 0:
             self.progress_bar.setValue(self.progress_bar.value() - 1)
+            if self.progress_bar.value() <= 80:
+                for i, sensor in enumerate(self.network_display.sensors):
+                    if sensor.isActive:
+                        print(self.progress_bar.value())
+                        sensor.fade_range_area(self.progress_bar.value())
+                        
         else:
             self.timer.stop()
-            self.progress_bar.setValue(100)
             self.network_display.simulation()
             self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors)
             if self.network_display.sensors:
+                self.progress_bar.setValue(100)
                 self.startBatteryDecrease()
+            else:
+                self.progress_bar.setValue(0)
 
     def startBatteryDecrease(self):
         if not self.network_display.sensors:
