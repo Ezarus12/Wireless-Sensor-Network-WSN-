@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtCore import QFile, Qt
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView, QToolBar, QAction
+from PyQt5.QtCore import QFile, Qt, QTimer
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView, QToolBar, QAction, QProgressBar
 from PyQt5.QtGui import QFont
 from PyQt5 import QtCore, QtWidgets
 from network_display import NetworkDisplay
@@ -41,7 +41,9 @@ class Window(QMainWindow):
 
         self.resetButton.clicked.connect(lambda: self.network_display.fun(self.numberSlider.value(), self.rangeSlider.value()))
         self.resetButton.clicked.connect(lambda: self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors))
-        self.startButton.clicked.connect(lambda: self.network_display.nextSubset())
+        
+        self.startButton.clicked.connect(lambda: self.startBatteryDecrease())
+        #self.startButton.clicked.connect(lambda: self.network_display.simulation())
 
         self.numberSlider.valueChanged.connect(lambda value: self.update_label(self.numberSliderNum, value))
         self.rangeSlider.valueChanged.connect(lambda value: self.update_label(self.rangeSliderNum, value))
@@ -61,6 +63,7 @@ class Window(QMainWindow):
         self.appName.setText("Wireless Sensor Network (WSN)")
         self.appName.setFont(QFont("Roboto", 32))
         self.appName.setMaximumHeight(100) # Ustawienie maksymalnej wysokości na 100 pikseli
+        
 
         self.centralwidget = QtWidgets.QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
@@ -155,6 +158,11 @@ class Window(QMainWindow):
         self.inactiveSensorsNum.setFont(QFont("Arial", 24))
         self.inactiveSensorsNum.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
+        self.progress_bar = QProgressBar(self.centralwidget)
+        self.progress_bar.setGeometry(QtCore.QRect(500, 382, 370, 60))
+        self.progress_bar.setValue(100)
+        self.progress_bar.setStyleSheet(str(stylesheet, encoding='utf-8'))
+
     def draw_network(self):
         self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors)
         pass
@@ -162,7 +170,23 @@ class Window(QMainWindow):
     def update_label(self, label_widget, value):
         # Aktualizuj etykietę na podstawie przekazanego widgetu i wartości suwaka
         label_widget.setText(str(value))
+    
+    def decreaseBatteryLife(self):
+        # Decrease battery life by 10% every 200 milliseconds
+        if self.progress_bar.value() > 0:
+            self.progress_bar.setValue(self.progress_bar.value() - 1)
+        else:
+            self.timer.stop()
+            self.progress_bar.setValue(100)
+            self.network_display.simulation()
+            if self.network_display.sensors:
+                self.startBatteryDecrease()
 
+    def startBatteryDecrease(self):
+        self.progress_bar.setValue(100)
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.decreaseBatteryLife)
+        self.timer.start(2)  # Decrease battery every 200 milliseconds
 
 
 if __name__ == '__main__':

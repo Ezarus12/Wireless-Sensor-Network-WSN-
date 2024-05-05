@@ -1,7 +1,8 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsEllipseItem, QGraphicsPixmapItem
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsEllipseItem, QGraphicsPixmapItem, QApplication
 from PyQt5.QtGui import QBrush, QColor, QPixmap
 import random
 import math
+import time
 from sensor import Sensor
 
 class NetworkDisplay:
@@ -55,14 +56,12 @@ class NetworkDisplay:
         to_remove = []
         for sensor in self.sensors:
             if sensor.isActive:
-                print("wylaczony")
                 sensor.hasPower = False
                 sensor.change_color_off()
             else:
                 sensor.isActive = True
                 sensor.change_color_active()
             if not sensor.hasPower:
-                print("usuniety")
                 to_remove.append(sensor)
 
         #Deleting dead sensors
@@ -71,6 +70,16 @@ class NetworkDisplay:
 
         self.createSubset()
         self.scene.update()
+    
+    def simulation(self):
+        #while self.sensors:
+            #time.sleep(2)  # Pause for 2 seconds before the next iteration
+            print("odpalone")
+            self.nextSubset()
+            self.scene.update()  # Manually trigger the scene update
+            QApplication.processEvents()  # Process pending GUI events
+            
+            
 
     def fun(self, num, range):
         self.scene.clear() #Clearing the scene of all the previous sensor and ranges
