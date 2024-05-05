@@ -72,11 +72,8 @@ class NetworkDisplay:
         self.scene.update()
     
     def simulation(self):
-        #while self.sensors:
-            #time.sleep(2)  # Pause for 2 seconds before the next iteration
-            print("odpalone")
-            self.nextSubset()
-            QApplication.processEvents()  # Process pending GUI events
+        self.nextSubset()
+        QApplication.processEvents()  # Process pending GUI events
             
             
 

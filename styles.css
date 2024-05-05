@@ -1,7 +1,7 @@
 
 
 QSlider::groove:horizontal {
-    background-color: #333333; 
+    background-color: #141414; 
     border: 3px solid #024C42;
     height: 20px;
 }
@@ -12,15 +12,15 @@ QSlider::handle:horizontal {
     width: 20px; 
     height: 50px;
     margin: -5px 0;
-    border-radius: 5px;
+    border-radius: 15px;
 }
 
 QSlider::handle:horizontal:hover {
-    background-color: red;
+    background-color: #0eecd2;
 }
 
 QSlider::handle:horizontal:pressed {
-    background-color: blue;
+    background-color: #252525;
 }
 
 QLabel {
@@ -45,6 +45,15 @@ QPushButton:pressed {
     color: white;
 }
 
-QAction {
-    background-color: red;
+QProgressBar {
+    background-color: #141414;
+    border-radius: 5px;
+    border: 2px solid #024C42;
+    font-size: 18px;
+    color: white;
+    text-align: center;
+}
+
+QProgressBar::chunk{
+    background-color: #1E776D;
 }

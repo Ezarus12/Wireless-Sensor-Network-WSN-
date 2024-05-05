@@ -36,5 +36,5 @@ class Sensor(QGraphicsEllipseItem):
 
     def fade_range_area(self, value):
         opacity = math.floor(50*((value/100)))
-        self.range_area.setBrush(QBrush(QColor(32, 179, 162, opacity)))
+        self.range_area.setBrush(QBrush(QColor(255, 0, 0, opacity)))
     # def fade_color(self, step):
