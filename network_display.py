@@ -40,7 +40,7 @@ class NetworkDisplay:
 
             self.createSubset()
             
-        print("Inactive sensors: ", self.inactive_sensors)    
+            
  
     def createSubset(self):
         for i, sensor in enumerate(self.sensors):
@@ -67,7 +67,7 @@ class NetworkDisplay:
         #Deleting dead sensors
         for sensor in to_remove:
             self.sensors.remove(sensor)
-
+        self.inactive_sensors = 0
         self.createSubset()
         self.scene.update()
     

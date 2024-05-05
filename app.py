@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtCore import QFile, Qt, QTimer
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView, QToolBar, QAction, QProgressBar
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView, QToolBar, QAction, QProgressBar, QMessageBox
 from PyQt5.QtGui import QFont
 from PyQt5 import QtCore, QtWidgets
 from network_display import NetworkDisplay
@@ -158,6 +158,7 @@ class Window(QMainWindow):
         self.inactiveSensorsNum.setFont(QFont("Arial", 24))
         self.inactiveSensorsNum.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
+        #Battery life progress bar
         self.progress_bar = QProgressBar(self.centralwidget)
         self.progress_bar.setGeometry(QtCore.QRect(500, 382, 370, 60))
         self.progress_bar.setValue(100)
@@ -179,14 +180,22 @@ class Window(QMainWindow):
             self.timer.stop()
             self.progress_bar.setValue(100)
             self.network_display.simulation()
+            self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors)
             if self.network_display.sensors:
                 self.startBatteryDecrease()
 
     def startBatteryDecrease(self):
+        if not self.network_display.sensors:
+            message_box = QMessageBox()
+            message_box.setWindowTitle("Cannot start the simulation")
+            message_box.setText("All of the sensors ran out of their battery")
+            message_box.setStyleSheet("QMessageBox { background-color: #333333; } QMessageBox QLabel { color: white; }")
+            message_box.exec_()
+            return
         self.progress_bar.setValue(100)
         self.timer = QTimer()
         self.timer.timeout.connect(self.decreaseBatteryLife)
-        self.timer.start(2)  # Decrease battery every 200 milliseconds
+        self.timer.start(10)  # Decrease battery every 200 milliseconds
 
 
 if __name__ == '__main__':
