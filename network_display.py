@@ -12,6 +12,9 @@ class NetworkDisplay:
         self.sensorNum = 40
         self.sensorRange = 100
         self.inactive_sensors = 0
+        self.simulationMode = '' # [0] - For area coverage and [1] - For target coverage
+        self.targetNum = 10
+        self.monitoringAnyTarget = False
         # Representation of sensors
         self.sensors = []
         self.targets = []
@@ -29,7 +32,8 @@ class NetworkDisplay:
         self.scene.addItem(terrain_pixmap_item)
         self.inactive_sensors = 0
 
-        self.generateTargets(10)
+        if self.simulationMode == 'T':
+            self.generateTargets(self.targetNum)
 
 
 
@@ -43,8 +47,10 @@ class NetworkDisplay:
             self.scene.addItem(sensor.range_area)
             self.sensors.append(sensor)
 
-        self.createSubsetTarget()
-        #self.createSubset()
+        if self.simulationMode == 'T':
+            self.createSubsetTarget()
+        else:
+            self.createSubset()
             
     def generateTargets(self, num):
         for i in range(num):
@@ -71,6 +77,7 @@ class NetworkDisplay:
                 if distance <= (self.sensorRange / 2) and not target.monitored:
                     target.monitored = True
                     sensor.monitoring = True
+                    self.monitoringAnyTarget = True
             if not sensor.monitoring:
                 self.inactive_sensors += 1
                 sensor.isActive = False
@@ -93,7 +100,14 @@ class NetworkDisplay:
         for sensor in to_remove:
             self.sensors.remove(sensor)
         self.inactive_sensors = 0
-        self.createSubset()
+        if self.simulationMode == 'T':
+            for i, target in enumerate(self.targets):
+                target.monitored = False
+                if i + 1 == self.targetNum:
+                    self.monitoringAnyTarget = False
+            self.createSubsetTarget()
+        else:
+            self.createSubset()
         self.scene.update()
     
     def simulation(self):

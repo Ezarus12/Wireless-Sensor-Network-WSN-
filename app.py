@@ -36,6 +36,7 @@ class Window(QMainWindow):
         
         # Tworzenie obiektu NetworkDisplay i przekazanie QGraphicsView
         self.network_display = NetworkDisplay(self.graphicsView)
+        self.network_display.simulationMode = 'A'
 
         # Rysowanie sieci sensorycznej
         self.draw_network()
@@ -300,32 +301,41 @@ class Window(QMainWindow):
             self.timer.stop()
             self.network_display.simulation()
             self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors)
-            if self.network_display.sensors:
+            print(self.network_display.monitoringAnyTarget)
+            if self.network_display.sensors and self.network_display.simulationMode == 'A' or self.network_display.monitoringAnyTarget:
                 self.progressBar.setValue(100)
                 self.startBatteryDecrease()
             else:
                 self.progressBar.setValue(0)
                 #Enable Ui interactive widgets:
-                self.numberSlider.setEnabled(True)
-                self.rangeSlider.setEnabled(True)
-                self.startButton.setEnabled(True)
-                self.resetButton.setEnabled(True)
-                self.targetSlider.setEnabled(True)
+                self.changeUIstate(True)
                 
+
+    def changeUIstate(self, state):
+        self.numberSlider.setEnabled(state)
+        self.rangeSlider.setEnabled(state)
+        self.startButton.setEnabled(state)
+        self.resetButton.setEnabled(state)
+        self.targetSlider.setEnabled(state)
 
     def startBatteryDecrease(self):
         #disable UI interactive widgets:
-        self.numberSlider.setEnabled(False)
-        self.rangeSlider.setEnabled(False)
-        self.startButton.setEnabled(False)
-        self.resetButton.setEnabled(False)
-        self.targetSlider.setEnabled(False)
+        self.changeUIstate(False)
         if not self.network_display.sensors:
             message_box = QMessageBox()
             message_box.setWindowTitle("Cannot start the simulation")
             message_box.setText("All of the sensors ran out of their battery")
             message_box.setStyleSheet("QMessageBox { background-color: #333333; } QMessageBox QLabel { color: white; }")
             message_box.exec_()
+            self.changeUIstate(True)
+            return
+        if not self.network_display.monitoringAnyTarget and self.network_display.simulationMode == 'T':
+            message_box = QMessageBox()
+            message_box.setWindowTitle("Cannot start the simulation")
+            message_box.setText("None of the targets is being monitored")
+            message_box.setStyleSheet("QMessageBox { background-color: #333333; } QMessageBox QLabel { color: white; }")
+            message_box.exec_()
+            self.changeUIstate(True)
             return
         self.progressBar.setValue(100)
         self.timer = QTimer()
