@@ -102,9 +102,10 @@ class NetworkDisplay:
             
             
 
-    def fun(self, num, range):
+    def ResetSensors(self, num, range):
         self.scene.clear() #Clearing the scene of all the previous sensor and ranges
         self.sensors.clear()
+        self.targets.clear()
         self.set_sensorNum(num)
         self.set_sensorRange(range)
         self.draw_network()

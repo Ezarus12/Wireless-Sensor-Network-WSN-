@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtCore import QFile, Qt, QTimer
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView, QToolBar, QAction, QProgressBar, QMessageBox, QCheckBox
-from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView, QToolBar, QAction, QProgressBar, QMessageBox, QCheckBox, QAction
+from PyQt5.QtGui import QFont, QIcon
 from PyQt5 import QtCore, QtWidgets
 from network_display import NetworkDisplay
 import math
@@ -32,6 +32,7 @@ class Window(QMainWindow):
         
         # Creating widgets
         self.create_widgets(stylesheet)
+        self.create_toolbar()
         
         # Tworzenie obiektu NetworkDisplay i przekazanie QGraphicsView
         self.network_display = NetworkDisplay(self.graphicsView)
@@ -48,12 +49,13 @@ class Window(QMainWindow):
         self.numberSlider.valueChanged.connect(lambda value: self.update_label(self.numberSliderNum, value))
         self.rangeSlider.valueChanged.connect(lambda value: self.update_label(self.rangeSliderNum, value))
         
-    def add_toolbar(self):
+    def create_toolbar(self):
         toolbar = QToolBar()
         self.addToolBar(toolbar)
-        Options = QAction("Options", self)
+        Settings = QAction(QIcon("setting.png"), "Settings", self)
+        toolbar.setStyleSheet("background-color: gray;")
         Edit = QAction("Edit", self)
-        toolbar.addAction(Options)
+        toolbar.addAction(Settings)
         toolbar.addAction(Edit)
 
     def resizeEvent(self, event):
@@ -61,7 +63,7 @@ class Window(QMainWindow):
         height = event.size().height()
         #Resize terrain represenation
         self.graphicsView.resize(math.floor(width*0.521),math.floor(height*0.926))
-        self.graphicsView.move(math.floor(width*0.47),math.floor(height*0.04))
+        self.graphicsView.move(math.floor(width*0.47),math.floor(height*0.02))
 
         #Resize title and intials
         self.titleText.resize(math.floor(width*0.2), math.floor(height*0.02))
@@ -276,7 +278,7 @@ class Window(QMainWindow):
 
     def reset(self):
         self.progressBar.setValue(100)
-        self.network_display.fun(self.numberSlider.value(), self.rangeSlider.value())
+        self.network_display.ResetSensors(self.numberSlider.value(), self.rangeSlider.value())
 
     def draw_network(self):
         self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors)
