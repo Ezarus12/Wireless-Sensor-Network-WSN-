@@ -39,8 +39,7 @@ class Window(QMainWindow):
         # Rysowanie sieci sensorycznej
         self.draw_network()
         #self.add_toolbar()
-
-        self.resetButton.clicked.connect(lambda: self.network_display.fun(self.numberSlider.value(), self.rangeSlider.value()))
+        self.resetButton.clicked.connect(lambda: self.reset())
         self.resetButton.clicked.connect(lambda: self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors))
         
         self.startButton.clicked.connect(lambda: self.startBatteryDecrease())
@@ -131,6 +130,7 @@ class Window(QMainWindow):
         #Progress Bar
         self.progressBarName.resize(math.floor(width*0.2), math.floor(height*0.1))
         self.progressBarName.move(math.floor(width*0.25),math.floor(height*0.50))
+        self.progressBarName.setFont(QFont("Rubik.tff", math.floor(width*0.2/16)))
 
         self.progressBar.resize(math.floor(width*0.2), math.floor(height*0.1))
         self.progressBar.move(math.floor(width*0.25),math.floor(height*0.60))
@@ -274,13 +274,16 @@ class Window(QMainWindow):
         self.progressBar.setValue(100)
         self.progressBar.setStyleSheet(str(stylesheet, encoding='utf-8'))         
 
+    def reset(self):
+        self.progressBar.setValue(100)
+        self.network_display.fun(self.numberSlider.value(), self.rangeSlider.value())
+
     def draw_network(self):
         self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors)
         pass
 
     def update_label(self, label_widget, value):
         # Aktualizuj etykietę na podstawie przekazanego widgetu i wartości suwaka
-        self.progressBar.setValue(100)
         label_widget.setText(str(value))
     
     def decreaseBatteryLife(self):
@@ -300,8 +303,21 @@ class Window(QMainWindow):
                 self.startBatteryDecrease()
             else:
                 self.progressBar.setValue(0)
+                #Enable Ui interactive widgets:
+                self.numberSlider.setEnabled(True)
+                self.rangeSlider.setEnabled(True)
+                self.startButton.setEnabled(True)
+                self.resetButton.setEnabled(True)
+                self.targetSlider.setEnabled(True)
+                
 
     def startBatteryDecrease(self):
+        #disable UI interactive widgets:
+        self.numberSlider.setEnabled(False)
+        self.rangeSlider.setEnabled(False)
+        self.startButton.setEnabled(False)
+        self.resetButton.setEnabled(False)
+        self.targetSlider.setEnabled(False)
         if not self.network_display.sensors:
             message_box = QMessageBox()
             message_box.setWindowTitle("Cannot start the simulation")

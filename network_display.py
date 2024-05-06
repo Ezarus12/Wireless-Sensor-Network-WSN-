@@ -4,6 +4,7 @@ import random
 import math
 import time
 from sensor import Sensor
+from target import Target
 
 class NetworkDisplay:
     def __init__(self, graphics_view):
@@ -13,6 +14,7 @@ class NetworkDisplay:
         self.inactive_sensors = 0
         # Representation of sensors
         self.sensors = []
+        self.targets = []
         graphics_view.setScene(self.scene)
         # Load terrain image
         self.terrain_image = QPixmap("terrain_image.jpg")
@@ -27,21 +29,32 @@ class NetworkDisplay:
         self.scene.addItem(terrain_pixmap_item)
         self.inactive_sensors = 0
 
+        self.generateTargets(10)
+
+
+
         for i in range(self.sensorNum):
             sensorSize = 10
             sensorX = random.randint(math.floor(self.sensorRange*0.5), math.floor(990-self.sensorRange*0.5))
             sensorY = random.randint(math.floor(self.sensorRange*0.5), math.floor(990-self.sensorRange*0.5))
             sensor = Sensor(sensorX, sensorY, sensorSize, self.sensorRange)  # Sensor position, size, and range
-            
             sensor.draw_range()  # Draw the sensor range
             self.scene.addItem(sensor)
             self.scene.addItem(sensor.range_area)
             self.sensors.append(sensor)
 
-            self.createSubset()
+        self.createSubsetTarget()
+        #self.createSubset()
             
-            
- 
+    def generateTargets(self, num):
+        for i in range(num):
+            targetX = random.randint(math.floor(self.sensorRange*0.5), math.floor(990-self.sensorRange*0.5))
+            targetY = random.randint(math.floor(self.sensorRange*0.5), math.floor(990-self.sensorRange*0.5))
+            target = Target(targetX, targetY, 15)
+            self.targets.append(target)
+            self.scene.addItem(target)
+
+    
     def createSubset(self):
         for i, sensor in enumerate(self.sensors):
             for j, other_sensor in enumerate(self.sensors[i+1:], start=i+1):
@@ -50,6 +63,18 @@ class NetworkDisplay:
                     self.inactive_sensors += 1
                     sensor.isActive = False
                     sensor.change_color_inactive()
+
+    def createSubsetTarget(self):
+        for sensor in self.sensors:
+            for target in self.targets:
+                distance = math.sqrt(((sensor.xPos - target.xPos) ** 2) + ((sensor.yPos - target.yPos) ** 2))
+                if distance <= (self.sensorRange / 2) and not target.monitored:
+                    target.monitored = True
+                    sensor.monitoring = True
+            if not sensor.monitoring:
+                self.inactive_sensors += 1
+                sensor.isActive = False
+                sensor.change_color_inactive()
 
     #Create next subset of sensors and turn off all the sensors from the previous subset
     def nextSubset(self):

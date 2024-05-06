@@ -16,6 +16,7 @@ class Sensor(QGraphicsEllipseItem):
         #Flags
         self.isActive = True
         self.hasPower = True
+        self.monitoring = False #Is sensor monitoring any target
         
     def draw_range(self):
         self.range_area = QGraphicsEllipseItem(self.xPos + (0.5*self.rect().width()) - (0.5*self.range), self.yPos + (0.5*self.rect().height()) - (0.5*self.range), self.range, self.range)
