@@ -23,15 +23,22 @@ class Window(QMainWindow):
         self.setCentralWidget(self.central_widget) # Setting central widget
 
         #Loading the styles file
-        style_file = QFile("styles.css")
+        style_file = QFile("Styles/styles.css")
         if style_file.open(QFile.ReadOnly | QFile.Text):
             stylesheet = style_file.readAll()
             style_file.close()
         else:
             print("Failed to open styles file")
-        
+
+        button_style_file = QFile("Styles/offButton.css")
+        if button_style_file.open(QFile.ReadOnly | QFile.Text):
+            buttonStylesheet = button_style_file.readAll()
+            button_style_file.close()
+        else:
+            print("Failed to open styles file")
+
         # Creating widgets
-        self.create_widgets(stylesheet)
+        self.create_widgets(stylesheet, buttonStylesheet)
         self.create_toolbar()
         
         # Tworzenie obiektu NetworkDisplay i przekazanie QGraphicsView
@@ -45,7 +52,9 @@ class Window(QMainWindow):
         self.resetButton.clicked.connect(lambda: self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors))
         
         self.startButton.clicked.connect(lambda: self.startBatteryDecrease())
-        #self.startButton.clicked.connect(lambda: self.network_display.simulation())
+
+        self.targetButton.clicked.connect(lambda: self.changeSimulationMode("Target", stylesheet, buttonStylesheet))
+        self.areaButton.clicked.connect(lambda: self.changeSimulationMode("Area", stylesheet, buttonStylesheet))
 
         self.numberSlider.valueChanged.connect(lambda value: self.update_label(self.numberSliderNum, value))
         self.rangeSlider.valueChanged.connect(lambda value: self.update_label(self.rangeSliderNum, value))
@@ -139,7 +148,7 @@ class Window(QMainWindow):
         self.progressBar.move(math.floor(width*0.25),math.floor(height*0.60))
         
 
-    def create_widgets(self, stylesheet):
+    def create_widgets(self, stylesheet, buttonStylesheet):
         #Creating app name widget
         self.appName = QLabel(self.central_widget)
         self.appName.setText("Wireless Sensor Network (WSN)")
@@ -275,7 +284,23 @@ class Window(QMainWindow):
         self.progressBar = QProgressBar(self.centralwidget)
         self.progressBar.setGeometry(QtCore.QRect(500, 382, 370, 60))
         self.progressBar.setValue(100)
-        self.progressBar.setStyleSheet(str(stylesheet, encoding='utf-8'))         
+        self.progressBar.setStyleSheet(str(stylesheet, encoding='utf-8'))
+
+        #Simulation mode buttons
+
+        self.modeName = QLabel(self.centralwidget)
+        self.modeName.setGeometry(QtCore.QRect(540, 210, 351, 61))
+        self.modeName.setText("Simulation mode")
+        self.modeName.setFont(QFont("Rubik.tff", 24))
+        self.modeName.setStyleSheet(str(stylesheet, encoding='utf-8'))
+
+        self.targetButton = QPushButton("Target", self.centralwidget)
+        self.targetButton.setGeometry(QtCore.QRect(500, 280, 340, 120))
+        self.targetButton.setStyleSheet(str(buttonStylesheet, encoding='utf-8')) 
+
+        self.areaButton = QPushButton("Area", self.centralwidget)
+        self.areaButton.setGeometry(QtCore.QRect(500, 420, 340, 120))
+        self.areaButton.setStyleSheet(str(stylesheet, encoding='utf-8'))     
 
     def reset(self):
         self.progressBar.setValue(100)
@@ -310,7 +335,6 @@ class Window(QMainWindow):
                 #Enable Ui interactive widgets:
                 self.changeUIstate(True)
                 
-
     def changeUIstate(self, state):
         self.numberSlider.setEnabled(state)
         self.rangeSlider.setEnabled(state)
@@ -341,6 +365,19 @@ class Window(QMainWindow):
         self.timer = QTimer()
         self.timer.timeout.connect(self.decreaseBatteryLife)
         self.timer.start(10)  # Decrease battery every 200 milliseconds
+
+    #Change simulation mode and switch button stylesheets
+    def changeSimulationMode(self, mode, stylesheet, buttonStylesheet):
+        if mode == "Target":
+            self.network_display.simulationMode = 'T'
+            self.targetButton.setStyleSheet(str(stylesheet, encoding='utf-8')) 
+            self.areaButton.setStyleSheet(str(buttonStylesheet, encoding='utf-8'))
+        elif mode == "Area":
+            self.network_display.simulationMode = 'A'
+            self.targetButton.setStyleSheet(str(buttonStylesheet, encoding='utf-8')) 
+            self.areaButton.setStyleSheet(str(stylesheet, encoding='utf-8'))
+        else:
+            print("Mode must be \"Target\" or \"Area\"")
 
 
 if __name__ == '__main__':
