@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsEllipseItem, QGraphicsPixmapItem, QApplication
-from PyQt5.QtGui import QBrush, QColor, QPixmap
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsEllipseItem, QGraphicsPixmapItem, QApplication, QGraphicsLineItem
+from PyQt5.QtGui import QBrush, QColor, QPixmap, QPen
+from PyQt5.QtCore import Qt, QTimer
 import random
 import math
 import time
@@ -11,10 +12,12 @@ class NetworkDisplay:
         self.scene = QGraphicsScene()
         self.sensorNum = 40
         self.sensorRange = 100
+        self.sensorSize = 10
         self.inactive_sensors = 0
         self.simulationMode = '' # [0] - For area coverage and [1] - For target coverage
         self.targetNum = 10
         self.monitoringAnyTarget = False
+        self.visualizeSensorsComunnication = True
         # Representation of sensors
         self.sensors = []
         self.targets = []
@@ -38,10 +41,9 @@ class NetworkDisplay:
 
 
         for i in range(self.sensorNum):
-            sensorSize = 10
             sensorX = random.randint(math.floor(self.sensorRange*0.5), math.floor(990-self.sensorRange*0.5))
             sensorY = random.randint(math.floor(self.sensorRange*0.5), math.floor(990-self.sensorRange*0.5))
-            sensor = Sensor(sensorX, sensorY, sensorSize, self.sensorRange)  # Sensor position, size, and range
+            sensor = Sensor(sensorX, sensorY, self.sensorSize, self.sensorRange)  # Sensor position, size, and range
             sensor.draw_range()  # Draw the sensor range
             self.scene.addItem(sensor)
             self.scene.addItem(sensor.range_area)
@@ -60,15 +62,37 @@ class NetworkDisplay:
             self.targets.append(target)
             self.scene.addItem(target)
 
-    
+    def visualizeNetwork(self, sensor, other_sensor):
+        #Draw a line between two sensors
+        line = QGraphicsLineItem(sensor.xPos + self.sensorSize/2, sensor.yPos + self.sensorSize/2 , other_sensor.xPos + self.sensorSize/2, other_sensor.yPos + self.sensorSize/2)
+        pen = QPen()
+        pen.setWidth(2)
+        pen.setColor(Qt.red)
+        line.setPen(pen)
+        line.setOpacity(0.1)
+        self.scene.addItem(line)
+        QApplication.processEvents()  # Przetwarzanie zdarzeń aplikacji
+        time.sleep(0.01)  # Opóźnienie rysowania kolejnej linii o 200 ms     
+
     def createSubset(self):
         for i, sensor in enumerate(self.sensors):
             for j, other_sensor in enumerate(self.sensors[i+1:], start=i+1):
                 distance = math.sqrt(((sensor.xPos - other_sensor.xPos) ** 2) + ((sensor.yPos - other_sensor.yPos) ** 2))
-                if distance <= (self.sensorRange / 2) and sensor.isActive and sensor.hasPower:
-                    self.inactive_sensors += 1
-                    sensor.isActive = False
-                    sensor.change_color_inactive()
+                if distance <= 200: #change to neightbaurs range
+                    if distance <= (self.sensorRange / 2) and sensor.isActive and sensor.hasPower:
+                        self.inactive_sensors += 1
+                        sensor.isActive = False
+                        sensor.change_color_inactive()
+                    if self.visualizeSensorsComunnication:
+                        self.visualizeNetwork(sensor, other_sensor)
+    # def createSubset(self):
+    #     for i, sensor in enumerate(self.sensors):
+    #         for j, other_sensor in enumerate(self.sensors[i+1:], start=i+1):
+    #             distance = math.sqrt(((sensor.xPos - other_sensor.xPos) ** 2) + ((sensor.yPos - other_sensor.yPos) ** 2))
+    #             if distance <= (self.sensorRange / 2) and sensor.isActive and sensor.hasPower:
+    #                 self.inactive_sensors += 1
+    #                 sensor.isActive = False
+    #                 sensor.change_color_inactive()
 
     def createSubsetTarget(self):
         for sensor in self.sensors:
