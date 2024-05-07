@@ -146,6 +146,17 @@ class Window(QMainWindow):
 
         self.progressBar.resize(math.floor(width*0.2), math.floor(height*0.1))
         self.progressBar.move(math.floor(width*0.25),math.floor(height*0.60))
+
+        #Simulation mode
+        self.modeName.resize(math.floor(width*0.13), math.floor(height*0.1))
+        self.modeName.move(math.floor(width*0.29),math.floor(height*0.15))
+        self.modeName.setFont(QFont("Rubik.tff", math.floor(width*0.2/16)))
+
+        self.targetButton.resize(math.floor(width*0.2), math.floor(height*0.1))
+        self.targetButton.move(math.floor(width*0.25), math.floor(height*0.25))
+        
+        self.areaButton.resize(math.floor(width*0.2), math.floor(height*0.1))
+        self.areaButton.move(math.floor(width*0.25), math.floor(height*0.37)) 
         
 
     def create_widgets(self, stylesheet, buttonStylesheet):
