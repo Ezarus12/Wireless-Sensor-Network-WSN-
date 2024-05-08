@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtCore import QFile, Qt, QTimer
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView, QToolBar, QAction, QProgressBar, QMessageBox, QCheckBox, QAction
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView, QToolBar, QAction, QProgressBar, QMessageBox, QAction
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5 import QtCore, QtWidgets
 from network_display import NetworkDisplay
