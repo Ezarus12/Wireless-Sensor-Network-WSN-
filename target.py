@@ -9,4 +9,10 @@ class Target(QGraphicsEllipseItem):
         self.setBrush(QBrush(QColor(255, 0, 0)))  # Sensor color
 
         #Flags
-        self.monitored = False
+        self.monitored = False #Is target being monitored by any sensor
+
+    def getX(self):
+        return self.xPos
+    
+    def getY(self):
+        return self.yPos

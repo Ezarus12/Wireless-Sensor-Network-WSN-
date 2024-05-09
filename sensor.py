@@ -2,9 +2,6 @@ from PyQt5.QtWidgets import QGraphicsEllipseItem
 from PyQt5.QtGui import QBrush, QColor
 import math 
 
-active_color = (14, 236, 210)
-off_color = (85, 85, 85)
-
 class Sensor(QGraphicsEllipseItem):
     def __init__(self, x, y, size, range):
         super().__init__(x, y, size, size)
@@ -19,8 +16,9 @@ class Sensor(QGraphicsEllipseItem):
         self.monitoring = False #Is sensor monitoring any target
 
     def draw_range(self):
+        #Allign the range area to the sensor's position
         self.range_area = QGraphicsEllipseItem(self.xPos + (0.5*self.rect().width()) - (0.5*self.range), self.yPos + (0.5*self.rect().height()) - (0.5*self.range), self.range, self.range)
-        self.range_area.setBrush(QBrush(QColor(32, 179, 162, 50)))
+        self.range_area.setBrush(QBrush(QColor(32, 179, 162, 50))) #Range color at 50% opacity
         return 
 
     def change_color_inactive(self):
@@ -35,7 +33,7 @@ class Sensor(QGraphicsEllipseItem):
         self.setBrush(QBrush(QColor(85, 85, 85)))  # Sensor color
         self.range_area.setBrush(QBrush(QColor(3, 57, 51, 0)))
 
+    #Fade the sensor's area by the given percentage (Lower the opacity)
     def fade_range_area(self, value):
         opacity = math.floor(50*((value/100)))
         self.range_area.setBrush(QBrush(QColor(255, 0, 0, opacity)))
-    # def fade_color(self, step):
