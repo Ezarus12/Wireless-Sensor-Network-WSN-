@@ -58,6 +58,7 @@ class Window(QMainWindow):
 
         self.numberSlider.valueChanged.connect(lambda value: self.update_label(self.numberSliderNum, value))
         self.rangeSlider.valueChanged.connect(lambda value: self.update_label(self.rangeSliderNum, value))
+        self.targetSlider.valueChanged.connect(lambda value: self.update_label(self.targetSliderNum, value))
         
     def create_toolbar(self):
         toolbar = QToolBar()
@@ -250,7 +251,7 @@ class Window(QMainWindow):
         self.targetSlider = QSlider(Qt.Horizontal, self.centralwidget)
         self.targetSlider.setGeometry(QtCore.QRect(30, 520, 331, 51))
         self.targetSlider.setMinimum(0)
-        self.targetSlider.setMaximum(25)
+        self.targetSlider.setMaximum(50)
         self.targetSlider.setTickInterval(10)
         self.targetSlider.setValue(10)
         self.targetSlider.setStyleSheet(str(stylesheet, encoding='utf-8'))
@@ -265,7 +266,7 @@ class Window(QMainWindow):
         #Target slider num
         self.targetSliderNum = QLabel(self.centralwidget)
         self.targetSliderNum.setGeometry(QtCore.QRect(120, 580, 141, 61))
-        self.targetSliderNum.setText("0")
+        self.targetSliderNum.setText("10")
         self.targetSliderNum.setFont(QFont("Rubik.tff", 32))
         self.targetSliderNum.setStyleSheet(str(stylesheet, encoding='utf-8'))
         self.targetSliderNum.setStyleSheet("color: white;")
@@ -315,7 +316,7 @@ class Window(QMainWindow):
 
     def reset(self):
         self.progressBar.setValue(100)
-        self.network_display.ResetSensors(self.numberSlider.value(), self.rangeSlider.value())
+        self.network_display.ResetSensors(self.numberSlider.value(), self.rangeSlider.value(), self.targetSlider.value())
 
     def draw_network(self):
         self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors)

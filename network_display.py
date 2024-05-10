@@ -141,12 +141,13 @@ class NetworkDisplay:
             
             
 
-    def ResetSensors(self, num, range):
+    def ResetSensors(self, sensorNum, range, targetNum):
         self.scene.clear() #Clearing the scene of all the previous sensor and ranges
         self.sensors.clear()
         self.targets.clear()
-        self.set_sensorNum(num)
+        self.set_sensorNum(sensorNum)
         self.set_sensorRange(range)
+        self.set_targetNum(targetNum)
         self.draw_network()
     
     def set_sensorNum(self, num):
@@ -154,6 +155,9 @@ class NetworkDisplay:
         
     def set_sensorRange(self, num):
         self.sensorRange = num*10
+
+    def set_targetNum(self, num):
+        self.targetNum = num
 
     def load_terrainImage(self, name):
         self.terrain_image = QPixmap(name)
