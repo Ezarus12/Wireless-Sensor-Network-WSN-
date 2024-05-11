@@ -19,6 +19,7 @@ class NetworkDisplay:
         self.targetNum = 10
         self.monitoringAnyTarget = False
         self.visualizeSensorsComunnication = False
+        self.delayVSN = False
         # Representation of sensors
         self.sensors = []
         self.targets = []
@@ -73,7 +74,8 @@ class NetworkDisplay:
         line.setOpacity(0.1)
         self.scene.addItem(line)
         QApplication.processEvents()
-        time.sleep(0.01)  
+        if self.delayVSN:
+            time.sleep(0.01)  
 
     def createSubset(self):
         for i, sensor in enumerate(self.sensors):

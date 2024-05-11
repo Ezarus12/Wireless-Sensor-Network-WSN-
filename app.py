@@ -71,18 +71,39 @@ class Window(QMainWindow):
         toolbar.addAction(Edit)
 
     def open_settings_window(self):
-        settings_dialog = QDialog(self)
-        settings_dialog.setWindowTitle("Settings")
-        
+        settingsWindowWidth = 500
+        settingsWindowHeight = 500
+        settingsWindow = QDialog(self)
+        settingsWindow.setWindowTitle("Settings")
+        settingsWindow.setGeometry(math.floor(windowWidth/2),math.floor(windowHeight/2) , settingsWindowWidth, settingsWindowHeight)
         layout = QVBoxLayout()
         
-        checkbox = QCheckBox("Visualize Sensors Comunnication")
-        layout.addWidget(checkbox)
+        #Checkbox for visualizing sensors communication (VSN)
+        checkboxVSN = QCheckBox("Visualize Sensors Comunnication")
+        checkboxVSN.setStyleSheet("color: white;")
         
-        settings_dialog.setLayout(layout)
+        #Checkbox for VSN delay
+        checkboxDelay = QCheckBox("Delay visualizing Sensors Comunnication")
+        checkboxDelay.setStyleSheet("color: white;")  
+
+        #Sensor detaction range
+        name = QLabel("range")
+        range = QSlider(Qt.Horizontal)
+        range.setMinimum(0)
+        range.setMaximum(150)
+        range.setTickInterval(1)
+        range.setValue(30)
+        num = QLabel("0")
+        layout.addWidget(checkboxVSN)
+        layout.addWidget(checkboxDelay)
+        layout.addWidget(name)
+        layout.addWidget(range)
+        layout.addWidget(num)
         
-        settings_dialog.exec_()
-        if checkbox.isChecked():
+        settingsWindow.setLayout(layout)
+        
+        settingsWindow.exec_()
+        if checkboxVSN.isChecked():
             self.network_display.visualizeSensorsComunnication = True
         else:
             self.network_display.visualizeSensorsComunnication = False
