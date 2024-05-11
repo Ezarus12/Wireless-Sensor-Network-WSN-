@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtCore import QFile, Qt, QTimer
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView, QToolBar, QAction, QProgressBar, QMessageBox, QAction
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView, QToolBar, QAction, QProgressBar, QMessageBox, QAction, QDialog, QVBoxLayout, QCheckBox
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5 import QtCore, QtWidgets
 from network_display import NetworkDisplay
@@ -64,10 +64,29 @@ class Window(QMainWindow):
         toolbar = QToolBar()
         self.addToolBar(toolbar)
         Settings = QAction(QIcon("setting.png"), "Settings", self)
+        Settings.triggered.connect(self.open_settings_window)
         toolbar.setStyleSheet("background-color: gray;")
         Edit = QAction("Edit", self)
         toolbar.addAction(Settings)
         toolbar.addAction(Edit)
+
+    def open_settings_window(self):
+        settings_dialog = QDialog(self)
+        settings_dialog.setWindowTitle("Settings")
+        
+        layout = QVBoxLayout()
+        
+        checkbox = QCheckBox("Visualize Sensors Comunnication")
+        layout.addWidget(checkbox)
+        
+        settings_dialog.setLayout(layout)
+        
+        settings_dialog.exec_()
+        if checkbox.isChecked():
+            self.network_display.visualizeSensorsComunnication = True
+        else:
+            self.network_display.visualizeSensorsComunnication = False
+        
 
     def resizeEvent(self, event):
         width = event.size().width()

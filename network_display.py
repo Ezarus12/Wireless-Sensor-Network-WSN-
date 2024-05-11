@@ -18,7 +18,7 @@ class NetworkDisplay:
         self.simulationMode = '' # [A] - For area coverage and [T] - For target coverage
         self.targetNum = 10
         self.monitoringAnyTarget = False
-        self.visualizeSensorsComunnication = True
+        self.visualizeSensorsComunnication = False
         # Representation of sensors
         self.sensors = []
         self.targets = []
