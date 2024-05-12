@@ -93,7 +93,9 @@ class Window(QMainWindow):
         range.setMaximum(150)
         range.setTickInterval(1)
         range.setValue(30)
+        
         num = QLabel("0")
+        num.setStyleSheet("color: white;")
         layout.addWidget(checkboxVSN)
         layout.addWidget(checkboxDelay)
         layout.addWidget(name)
