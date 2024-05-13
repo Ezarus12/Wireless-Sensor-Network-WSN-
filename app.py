@@ -72,7 +72,7 @@ class Window(QMainWindow):
 
     def open_settings_window(self):
         settingsWindowWidth = 500
-        settingsWindowHeight = 500
+        settingsWindowHeight = 200
         settingsWindow = QDialog(self)
         settingsWindow.setWindowTitle("Settings")
         settingsWindow.setGeometry(math.floor(windowWidth/2),math.floor(windowHeight/2) , settingsWindowWidth, settingsWindowHeight)
@@ -95,24 +95,28 @@ class Window(QMainWindow):
             checkboxDelay.setChecked(False)  
 
         #Sensor detaction range
-        name = QLabel("range")
+        name = QLabel("Sensor's detection range")
+        name.setStyleSheet("color: white;")
         range = QSlider(Qt.Horizontal)
         range.setMinimum(0)
-        range.setMaximum(150)
+        range.setMaximum(1000)
         range.setTickInterval(1)
-        range.setValue(30)
+        range.setValue(self.network_display.detectionRange)
         
-        num = QLabel("0")
+        num = QLabel(str(self.network_display.detectionRange))
         num.setStyleSheet("color: white;")
         layout.addWidget(checkboxVSN)
         layout.addWidget(checkboxDelay)
         layout.addWidget(name)
         layout.addWidget(range)
         layout.addWidget(num)
-        
+        range.valueChanged.connect(lambda value: self.update_label(num, value))
         settingsWindow.setLayout(layout)
         
         settingsWindow.exec_()
+
+        self.network_display.set_detectionRange(range.value())
+
         if checkboxVSN.isChecked():
             self.network_display.visualizeSensorsComunnication = True
         else:
@@ -437,6 +441,8 @@ class Window(QMainWindow):
     def changeSimulationMode(self, mode, stylesheet, buttonStylesheet):
         if mode == "Target":
             self.network_display.simulationMode = 'T'
+            self.network_display.delayVSN = False
+            self.network_display.visualizeNetwork = False
             self.targetButton.setStyleSheet(str(stylesheet, encoding='utf-8')) 
             self.areaButton.setStyleSheet(str(buttonStylesheet, encoding='utf-8'))
         elif mode == "Area":

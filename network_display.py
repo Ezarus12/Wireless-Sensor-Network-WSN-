@@ -154,6 +154,9 @@ class NetworkDisplay:
     def set_targetNum(self, num):
         self.targetNum = num
 
+    def set_detectionRange(self, num):
+        self.detectionRange = num
+
     def load_terrainImage(self, name):
         self.terrain_image = QPixmap(name)
         if self.terrain_image.isNull():
