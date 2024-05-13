@@ -81,10 +81,18 @@ class Window(QMainWindow):
         #Checkbox for visualizing sensors communication (VSN)
         checkboxVSN = QCheckBox("Visualize Sensors Comunnication")
         checkboxVSN.setStyleSheet("color: white;")
+        if (self.network_display.visualizeSensorsComunnication):
+            checkboxVSN.setChecked(True)
+        else:
+            checkboxVSN.setChecked(False)
         
         #Checkbox for VSN delay
         checkboxDelay = QCheckBox("Delay visualizing Sensors Comunnication")
-        checkboxDelay.setStyleSheet("color: white;")  
+        checkboxDelay.setStyleSheet("color: white;")
+        if (self.network_display.delayVSN):
+            checkboxDelay.setChecked(True)
+        else:
+            checkboxDelay.setChecked(False)  
 
         #Sensor detaction range
         name = QLabel("range")
@@ -109,6 +117,11 @@ class Window(QMainWindow):
             self.network_display.visualizeSensorsComunnication = True
         else:
             self.network_display.visualizeSensorsComunnication = False
+
+        if checkboxDelay.isChecked():
+            self.network_display.delayVSN = True
+        else:
+            self.network_display.delayVSN = False
         
 
     def resizeEvent(self, event):

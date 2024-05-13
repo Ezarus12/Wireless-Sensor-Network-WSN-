@@ -88,14 +88,7 @@ class NetworkDisplay:
                         sensor.change_color_inactive()
                     if self.visualizeSensorsComunnication:
                         self.visualizeNetwork(sensor, other_sensor)
-    # def createSubset(self):
-    #     for i, sensor in enumerate(self.sensors):
-    #         for j, other_sensor in enumerate(self.sensors[i+1:], start=i+1):
-    #             distance = math.sqrt(((sensor.xPos - other_sensor.xPos) ** 2) + ((sensor.yPos - other_sensor.yPos) ** 2))
-    #             if distance <= (self.sensorRange / 2) and sensor.isActive and sensor.hasPower:
-    #                 self.inactive_sensors += 1
-    #                 sensor.isActive = False
-    #                 sensor.change_color_inactive()
+
 
     def createSubsetTarget(self):
         for sensor in self.sensors:
