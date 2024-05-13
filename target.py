@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QGraphicsEllipseItem
 from PyQt5.QtGui import QBrush, QColor
 
+#Target class containg the target postition and representing it by the red dot
 class Target(QGraphicsEllipseItem):
     def __init__(self, x, y, size):
         super().__init__(x, y, size, size)

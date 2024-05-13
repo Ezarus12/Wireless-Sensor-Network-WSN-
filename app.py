@@ -99,7 +99,7 @@ class Window(QMainWindow):
         name.setStyleSheet("color: white;")
         range = QSlider(Qt.Horizontal)
         range.setMinimum(0)
-        range.setMaximum(1000)
+        range.setMaximum(2000)
         range.setTickInterval(1)
         range.setValue(self.network_display.detectionRange)
         
@@ -111,6 +111,7 @@ class Window(QMainWindow):
         layout.addWidget(range)
         layout.addWidget(num)
         range.valueChanged.connect(lambda value: self.update_label(num, value))
+
         settingsWindow.setLayout(layout)
         
         settingsWindow.exec_()
@@ -126,7 +127,6 @@ class Window(QMainWindow):
             self.network_display.delayVSN = True
         else:
             self.network_display.delayVSN = False
-        
 
     def resizeEvent(self, event):
         width = event.size().width()
@@ -374,8 +374,10 @@ class Window(QMainWindow):
         self.areaButton.setStyleSheet(str(stylesheet, encoding='utf-8'))     
 
     def reset(self):
+        self.changeUIstateAllowReset(False)
         self.progressBar.setValue(100)
         self.network_display.ResetSensors(self.numberSlider.value(), self.rangeSlider.value(), self.targetSlider.value())
+        self.changeUIstateAllowReset(True)
 
     def draw_network(self):
         self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors)
@@ -406,12 +408,20 @@ class Window(QMainWindow):
                 #Enable Ui interactive widgets:
                 self.changeUIstate(True)
                 
+    
     def changeUIstate(self, state):
         self.numberSlider.setEnabled(state)
         self.rangeSlider.setEnabled(state)
         self.startButton.setEnabled(state)
         self.resetButton.setEnabled(state)
         self.targetSlider.setEnabled(state)
+        self.targetButton.setEnabled(state)
+        self.areaButton.setEnabled(state)
+
+    def changeUIstateAllowReset(self, state):
+        self.changeUIstate(state)
+        self.resetButton.setEnabled(True)
+
 
     def startBatteryDecrease(self):
         #disable UI interactive widgets:
