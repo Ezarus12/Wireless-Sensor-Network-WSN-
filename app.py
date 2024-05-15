@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget,
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5 import QtCore, QtWidgets
 from network_display import NetworkDisplay
+from summary import Summary
 import math
 
 #***********   TO DO  ***************#
@@ -11,6 +12,7 @@ import math
 #2. Add font loading check
 #3. Add graph
 #4. Comments
+#5. Add summary file creation
 
 
 
@@ -19,6 +21,7 @@ import math
 windowHeight = 1080
 windowWidth = 1920
 aspectRatio = 16/9
+currentSubset = 0
 
 class Window(QMainWindow):
     def __init__(self):
@@ -387,6 +390,7 @@ class Window(QMainWindow):
         self.progressBar.setValue(100)
         self.network_display.ResetSensors(self.numberSlider.value(), self.rangeSlider.value(), self.targetSlider.value())
         self.changeUIstateAllowReset(True)
+        currentSubset = 0
 
     def draw_network(self):
         self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors)
@@ -453,35 +457,16 @@ class Window(QMainWindow):
         self.progressBar.setValue(100)
         self.timer = QTimer()
         if self.network_display.simulationMode == "A":
-            self.simulation_log_message_area()
+            summary = Summary(self.network_display.sensorNum, self.network_display.sensorRange)
+            summary.simulation_log_message_area(self.network_display.sensors)
         elif self.network_display.simulationMode == "T":
-            self.simulation_log_message_target()
+           summary = Summary(self.network_display.sensorNum, self.network_display.sensorRange, self.network_display.targetNum)
+           summary.simulation_log_message_target(self.network_display.sensors, self.network_display.targets)
         else:
             print("Error: Incorrect simulation mode.", "Mode must be \"Target\" or \"Area\"")
         self.timer.timeout.connect(self.decreaseBatteryLife)
         self.timer.start(10)  # Decrease battery every 200 milliseconds
-
-    #Log message containing number of currently active sensors and percentage of monitored area
-    def simulation_log_message_area(self):
-        activeSensorNum = 0
-        for sensor in self.network_display.sensors:
-            if sensor.isActive:
-                activeSensorNum += 1
-        print("Active sensors: ", activeSensorNum, "/", self.network_display.sensorNum, ". ", "Monitored area: ", (activeSensorNum*(self.network_display.sensorRange/2)**2 * 3.14/10000), "%",)
-
-    def simulation_log_message_target(self):
-        activeSensorNum = 0
-        monitoredTargetsNum = 0
-        for sensor in self.network_display.sensors:
-            if sensor.isActive:
-                activeSensorNum += 1
-        for target in self.network_display.targets:
-            if target.monitored:
-                monitoredTargetsNum += 1
-
-        print("Active sensors: ", activeSensorNum, "/", self.network_display.sensorNum, ". ", "Monitored targets: ", monitoredTargetsNum, "/", self.network_display.targetNum)
         
-
     #Change simulation mode and switch button stylesheets
     def changeSimulationMode(self, mode, stylesheet, buttonStylesheet):
         if mode == "Target":
