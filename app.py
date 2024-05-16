@@ -5,6 +5,7 @@ from PyQt5.QtGui import QFont, QIcon
 from PyQt5 import QtCore, QtWidgets
 from network_display import NetworkDisplay
 from summary import Summary
+from datetime import datetime
 import math
 
 #***********   TO DO  ***************#
@@ -21,7 +22,6 @@ import math
 windowHeight = 1080
 windowWidth = 1920
 aspectRatio = 16/9
-currentSubset = 0
 
 class Window(QMainWindow):
     def __init__(self):
@@ -63,7 +63,7 @@ class Window(QMainWindow):
         self.resetButton.clicked.connect(lambda: self.reset())
         self.resetButton.clicked.connect(lambda: self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors))
         
-        self.startButton.clicked.connect(lambda: self.startBatteryDecrease())
+        self.startButton.clicked.connect(lambda: self.startSimulation())
 
         self.targetButton.clicked.connect(lambda: self.changeSimulationMode("Target", stylesheet, buttonStylesheet))
         self.areaButton.clicked.connect(lambda: self.changeSimulationMode("Area", stylesheet, buttonStylesheet))
@@ -390,7 +390,6 @@ class Window(QMainWindow):
         self.progressBar.setValue(100)
         self.network_display.ResetSensors(self.numberSlider.value(), self.rangeSlider.value(), self.targetSlider.value())
         self.changeUIstateAllowReset(True)
-        currentSubset = 0
 
     def draw_network(self):
         self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors)
@@ -400,7 +399,7 @@ class Window(QMainWindow):
         # Aktualizuj etykietę na podstawie przekazanego widgetu i wartości suwaka
         label_widget.setText(str(value))
     
-    def decreaseBatteryLife(self):
+    def decreaseBatteryLife(self, fileName):
         # Decrease battery life by 10% every 200 milliseconds
         if self.progressBar.value() > 0:
             self.progressBar.setValue(self.progressBar.value() - 1)
@@ -414,7 +413,7 @@ class Window(QMainWindow):
             self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors)
             if self.network_display.sensors and self.network_display.simulationMode == 'A' or self.network_display.monitoringAnyTarget:
                 self.progressBar.setValue(100)
-                self.startBatteryDecrease()
+                self.startBatteryDecrease(fileName)
             else:
                 self.progressBar.setValue(0)
                 #Enable Ui interactive widgets:
@@ -434,8 +433,11 @@ class Window(QMainWindow):
         self.changeUIstate(state)
         self.resetButton.setEnabled(True)
 
+    def startSimulation(self):
+        fileName = "Simulation_" + datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".txt"
+        self.startBatteryDecrease(fileName)
 
-    def startBatteryDecrease(self):
+    def startBatteryDecrease(self, fileName):
         #disable UI interactive widgets:
         self.changeUIstate(False)
         if not self.network_display.sensors:
@@ -458,13 +460,13 @@ class Window(QMainWindow):
         self.timer = QTimer()
         if self.network_display.simulationMode == "A":
             summary = Summary(self.network_display.sensorNum, self.network_display.sensorRange)
-            summary.simulation_log_message_area(self.network_display.sensors)
+            summary.simulation_log_message_area(self.network_display.sensors, fileName)
         elif self.network_display.simulationMode == "T":
            summary = Summary(self.network_display.sensorNum, self.network_display.sensorRange, self.network_display.targetNum)
            summary.simulation_log_message_target(self.network_display.sensors, self.network_display.targets)
         else:
             print("Error: Incorrect simulation mode.", "Mode must be \"Target\" or \"Area\"")
-        self.timer.timeout.connect(self.decreaseBatteryLife)
+        self.timer.timeout.connect(lambda: self.decreaseBatteryLife(fileName))
         self.timer.start(10)  # Decrease battery every 200 milliseconds
         
     #Change simulation mode and switch button stylesheets
