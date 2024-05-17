@@ -1,0 +1,1 @@
+Active sensors: 1/30. Monitored targets: 1/10

@@ -10,24 +10,23 @@ class Summary:
     def create_log_file(self, name):
         print("xd")
 
-    def simulation_log_message_area(self, sensors, fileName):
+    def simulation_log_message_area(self, sensors, fileName, subset):
 
         with open("Logs/" + str(fileName), "a") as file:
             activeSensorNum = 0
             for sensor in sensors:
                 if sensor.isActive:
                     activeSensorNum += 1
-            
-            print("Active sensors: ", activeSensorNum, "/", self.sensorNum, ". ", "Monitored area: ", (activeSensorNum*(self.sensorRange/2)**2 * 3.14/10000), "%",)
-            file.write("Active sensors: " + str(activeSensorNum) + "/" + str(self.sensorNum) + ". " + "Monitored area: " + str(activeSensorNum*(self.sensorRange/2)**2 * 3.14/10000) + "%\n")
+            file.write("Subset:" + str(subset) + "\n" + "Active sensors: " + str(activeSensorNum) + "/" + str(self.sensorNum) + ". " + "Monitored area: " + str(activeSensorNum*(self.sensorRange/2)**2 * 3.14/10000) + "%\n")
 
-    def simulation_log_message_target(self, sensors, targets):
-        activeSensorNum = 0
-        monitoredTargetsNum = 0
-        for sensor in sensors:
-            if sensor.isActive:
-                activeSensorNum += 1
-        for target in targets:
-            if target.monitored:
-                monitoredTargetsNum += 1
-        print("Active sensors: ", activeSensorNum, "/", self.sensorNum, ". ", "Monitored targets: ", monitoredTargetsNum, "/", self.targetNum)
+    def simulation_log_message_target(self, sensors, targets, fileName, subset):
+        with open("Logs/" + str(fileName), "a") as file:
+            activeSensorNum = 0
+            monitoredTargetsNum = 0
+            for sensor in sensors:
+                if sensor.isActive:
+                    activeSensorNum += 1
+            for target in targets:
+                if target.monitored:
+                    monitoredTargetsNum += 1
+            file.write("Subset:" + str(subset) + "\n" + "Active sensors: " + str(activeSensorNum) + "/" + str(self.sensorNum) + ". " + "Monitored targets: " + str(monitoredTargetsNum) + "/" + str(self.targetNum) + "\n")

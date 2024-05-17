@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsEllipseItem, QGraphicsPixmapItem, QApplication, QGraphicsLineItem, QMessageBox
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsEllipseItem, QGraphicsPixmapItem, QApplication, QGraphicsLineItem
 from PyQt5.QtGui import QBrush, QColor, QPixmap, QPen
 from PyQt5.QtCore import Qt, QTimer
 import random

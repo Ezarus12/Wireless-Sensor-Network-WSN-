@@ -434,6 +434,7 @@ class Window(QMainWindow):
         self.resetButton.setEnabled(True)
 
     def startSimulation(self):
+        self.subset = 0
         fileName = "Simulation_" + datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".txt"
         self.startBatteryDecrease(fileName)
 
@@ -458,12 +459,13 @@ class Window(QMainWindow):
             return
         self.progressBar.setValue(100)
         self.timer = QTimer()
+        self.subset += 1
         if self.network_display.simulationMode == "A":
             summary = Summary(self.network_display.sensorNum, self.network_display.sensorRange)
-            summary.simulation_log_message_area(self.network_display.sensors, fileName)
+            summary.simulation_log_message_area(self.network_display.sensors, fileName, self.subset)
         elif self.network_display.simulationMode == "T":
            summary = Summary(self.network_display.sensorNum, self.network_display.sensorRange, self.network_display.targetNum)
-           summary.simulation_log_message_target(self.network_display.sensors, self.network_display.targets)
+           summary.simulation_log_message_target(self.network_display.sensors, self.network_display.targets, fileName, self.subset)
         else:
             print("Error: Incorrect simulation mode.", "Mode must be \"Target\" or \"Area\"")
         self.timer.timeout.connect(lambda: self.decreaseBatteryLife(fileName))
