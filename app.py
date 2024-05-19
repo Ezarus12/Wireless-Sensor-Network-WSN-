@@ -42,7 +42,7 @@ class Window(QMainWindow):
         else:
             print("Failed to open styles file")
 
-        button_style_file = QFile("Styles/offButton.css")
+        button_style_file = QFile("Styles/offButton.css") #Style file used for inactive button
         if button_style_file.open(QFile.ReadOnly | QFile.Text):
             buttonStylesheet = button_style_file.readAll()
             button_style_file.close()
@@ -51,27 +51,34 @@ class Window(QMainWindow):
 
         # Creating widgets
         self.create_widgets(stylesheet, buttonStylesheet)
+
+        #Creating toolbar
         self.create_toolbar()
         
-        # Tworzenie obiektu NetworkDisplay i przekazanie QGraphicsView
+        # Creating NetworkDisplay object and setting default simulation mode to Area
         self.network_display = NetworkDisplay(self.graphicsView)
         self.network_display.simulationMode = 'A'
 
-        # Rysowanie sieci sensorycznej
+        # Intitial network draw using init parameters
         self.draw_network()
-        #self.add_toolbar()
+
+        #Connecting buttons to methods
         self.resetButton.clicked.connect(lambda: self.reset())
         self.resetButton.clicked.connect(lambda: self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors))
         
         self.startButton.clicked.connect(lambda: self.startSimulation())
 
         self.targetButton.clicked.connect(lambda: self.changeSimulationMode("Target", stylesheet, buttonStylesheet))
+        
         self.areaButton.clicked.connect(lambda: self.changeSimulationMode("Area", stylesheet, buttonStylesheet))
 
         self.numberSlider.valueChanged.connect(lambda value: self.update_label(self.numberSliderNum, value))
-        self.rangeSlider.valueChanged.connect(lambda value: self.update_label(self.rangeSliderNum, value))
-        self.targetSlider.valueChanged.connect(lambda value: self.update_label(self.targetSliderNum, value))
         
+        self.rangeSlider.valueChanged.connect(lambda value: self.update_label(self.rangeSliderNum, value))
+        
+        self.targetSlider.valueChanged.connect(lambda value: self.update_label(self.targetSliderNum, value))
+
+    #Creating toolbar
     def create_toolbar(self):
         toolbar = QToolBar()
         self.addToolBar(toolbar)
@@ -82,12 +89,17 @@ class Window(QMainWindow):
         toolbar.addAction(Settings)
         toolbar.addAction(Edit)
 
+    #Open setting window containing additional parameters
     def open_settings_window(self):
+        #Window resolution
         settingsWindowWidth = 500
         settingsWindowHeight = 200
+        
         settingsWindow = QDialog(self)
         settingsWindow.setWindowTitle("Settings")
         settingsWindow.setGeometry(math.floor(windowWidth/2),math.floor(windowHeight/2) , settingsWindowWidth, settingsWindowHeight)
+
+        #Creating layout as QVBox
         layout = QVBoxLayout()
         
         #Checkbox for visualizing sensors communication (VSN)
@@ -117,11 +129,15 @@ class Window(QMainWindow):
         
         num = QLabel(str(self.network_display.detectionRange))
         num.setStyleSheet("color: white;")
+
+        #Adding widgets to the window layout
         layout.addWidget(checkboxVSN)
         layout.addWidget(checkboxDelay)
         layout.addWidget(name)
         layout.addWidget(range)
         layout.addWidget(num)
+
+        #Connecting range slider
         range.valueChanged.connect(lambda value: self.update_label(num, value))
 
         settingsWindow.setLayout(layout)
@@ -140,6 +156,7 @@ class Window(QMainWindow):
         else:
             self.network_display.delayVSN = False
 
+    #Method controlling window layout for different resuolution, keeping the correct postion and proportion of the widgets
     def resizeEvent(self, event):
         width = event.size().width()
         height = event.size().height()
@@ -231,6 +248,7 @@ class Window(QMainWindow):
         self.areaButton.move(math.floor(width*0.25), math.floor(height*0.37)) 
         
 
+    #Create all of the scene widgets and add them to the layout
     def create_widgets(self, stylesheet, buttonStylesheet):
         #Creating app name widget
         self.appName = QLabel(self.central_widget)
@@ -385,6 +403,7 @@ class Window(QMainWindow):
         self.areaButton.setGeometry(QtCore.QRect(500, 420, 340, 120))
         self.areaButton.setStyleSheet(str(stylesheet, encoding='utf-8'))     
 
+    #Reset the simulation parameters and generate new terrain scene
     def reset(self):
         self.changeUIstateAllowReset(False)
         self.progressBar.setValue(100)
@@ -395,14 +414,15 @@ class Window(QMainWindow):
         self.update_label(self.inactiveSensorsNum, self.network_display.inactive_sensors)
         pass
 
+    #Update the label of the given widget
     def update_label(self, label_widget, value):
-        # Aktualizuj etykietę na podstawie przekazanego widgetu i wartości suwaka
         label_widget.setText(str(value))
     
     def decreaseBatteryLife(self, fileName):
         # Decrease battery life by 10% every 200 milliseconds
         if self.progressBar.value() > 0:
             self.progressBar.setValue(self.progressBar.value() - 1)
+            #Fade the range area of the active sensors
             for i, sensor in enumerate(self.network_display.sensors):
                 if sensor.isActive:
                     sensor.fade_range_area(self.progressBar.value())
@@ -419,7 +439,7 @@ class Window(QMainWindow):
                 #Enable Ui interactive widgets:
                 self.changeUIstate(True)
                 
-    
+    #Turn On or Off the UI widgets
     def changeUIstate(self, state):
         self.numberSlider.setEnabled(state)
         self.rangeSlider.setEnabled(state)
@@ -429,15 +449,18 @@ class Window(QMainWindow):
         self.targetButton.setEnabled(state)
         self.areaButton.setEnabled(state)
 
+    #Turn On or Off UI widgets except the resetButton which is set to True
     def changeUIstateAllowReset(self, state):
         self.changeUIstate(state)
         self.resetButton.setEnabled(True)
 
+    #Reset number of subset create logFile name and start the simulation
     def startSimulation(self):
         self.subset = 0
         fileName = "Simulation_" + datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".txt"
         self.startBatteryDecrease(fileName)
 
+    #Perform the simulation and decrease battery from 100 to 0 for every subset
     def startBatteryDecrease(self, fileName):
         #disable UI interactive widgets:
         self.changeUIstate(False)
