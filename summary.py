@@ -8,7 +8,7 @@ class Summary:
         #Log message containing number of currently active sensors and percentage of monitored area
 
     def create_log_file(self, name):
-        print("xd")
+        print("logfile")
 
     def simulation_log_message_area(self, sensors, fileName, subset):
 
