@@ -1,0 +1,36 @@
+Subset:1
+Active sensors: 14/150. Monitored area: 68.6875%
+Subset:2
+Active sensors: 10/150. Monitored area: 49.0625%
+Subset:3
+Active sensors: 10/150. Monitored area: 49.0625%
+Subset:4
+Active sensors: 11/150. Monitored area: 53.96875%
+Subset:5
+Active sensors: 11/150. Monitored area: 53.96875%
+Subset:6
+Active sensors: 6/150. Monitored area: 29.4375%
+Subset:7
+Active sensors: 8/150. Monitored area: 39.25%
+Subset:8
+Active sensors: 8/150. Monitored area: 39.25%
+Subset:9
+Active sensors: 10/150. Monitored area: 49.0625%
+Subset:10
+Active sensors: 10/150. Monitored area: 49.0625%
+Subset:11
+Active sensors: 9/150. Monitored area: 44.15625%
+Subset:12
+Active sensors: 9/150. Monitored area: 44.15625%
+Subset:13
+Active sensors: 10/150. Monitored area: 49.0625%
+Subset:14
+Active sensors: 10/150. Monitored area: 49.0625%
+Subset:15
+Active sensors: 6/150. Monitored area: 29.4375%
+Subset:16
+Active sensors: 4/150. Monitored area: 19.625%
+Subset:17
+Active sensors: 3/150. Monitored area: 14.71875%
+Subset:18
+Active sensors: 1/150. Monitored area: 4.90625%

@@ -6,6 +6,7 @@ from PyQt5 import QtCore, QtWidgets
 from network_display import NetworkDisplay
 from summary import Summary
 from datetime import datetime
+from graph import GraphWindow
 import math
 
 #***********   TO DO  ***************#
@@ -49,6 +50,10 @@ class Window(QMainWindow):
         else:
             print("Failed to open styles file")
 
+        # Variables
+        self.activeSensorsGraph = []
+        self.monitoredAreaGraph = []
+
         # Creating widgets
         self.create_widgets(stylesheet, buttonStylesheet)
 
@@ -77,6 +82,10 @@ class Window(QMainWindow):
         self.rangeSlider.valueChanged.connect(lambda value: self.update_label(self.rangeSliderNum, value))
         
         self.targetSlider.valueChanged.connect(lambda value: self.update_label(self.targetSliderNum, value))
+
+    def graphWindow(self):
+        self.second_window = GraphWindow(self.activeSensorsGraph, self.monitoredAreaGraph, self.subset)
+        self.second_window.show()
 
     #Creating toolbar
     def create_toolbar(self):
@@ -405,6 +414,8 @@ class Window(QMainWindow):
 
     #Reset the simulation parameters and generate new terrain scene
     def reset(self):
+        self.activeSensorsGraph = []
+        self.monitoredAreaGraph = []
         self.changeUIstateAllowReset(False)
         self.progressBar.setValue(100)
         self.network_display.ResetSensors(self.numberSlider.value(), self.rangeSlider.value(), self.targetSlider.value())
@@ -438,7 +449,9 @@ class Window(QMainWindow):
                 self.progressBar.setValue(0)
                 #Enable Ui interactive widgets:
                 self.changeUIstate(True)
-                
+
+                self.graphWindow()
+    
     #Turn On or Off the UI widgets
     def changeUIstate(self, state):
         self.numberSlider.setEnabled(state)
@@ -459,6 +472,17 @@ class Window(QMainWindow):
         self.subset = 0
         fileName = "Simulation_" + datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".txt"
         self.startBatteryDecrease(fileName)
+
+
+    #Format data for the graph
+    def formatDataGraph(self):
+        activeSensorNum = 0
+        for sensor in self.network_display.sensors:
+            if sensor.isActive:
+                    activeSensorNum += 1
+        self.activeSensorsGraph.append(activeSensorNum)
+        self.monitoredAreaGraph.append(activeSensorNum*(self.network_display.sensorRange/2)**2 * 3.14/10000)
+        
 
     #Perform the simulation and decrease battery from 100 to 0 for every subset
     def startBatteryDecrease(self, fileName):
@@ -484,6 +508,7 @@ class Window(QMainWindow):
         self.timer = QTimer()
         self.subset += 1
         if self.network_display.simulationMode == "A":
+            self.formatDataGraph()
             summary = Summary(self.network_display.sensorNum, self.network_display.sensorRange)
             summary.simulation_log_message_area(self.network_display.sensors, fileName, self.subset)
         elif self.network_display.simulationMode == "T":

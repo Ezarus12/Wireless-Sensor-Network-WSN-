@@ -1,6 +1,0 @@
-Active sensors: 19/99. Monitored targets: 29/29
-Active sensors: 19/99. Monitored targets: 25/29
-Active sensors: 13/99. Monitored targets: 19/29
-Active sensors: 6/99. Monitored targets: 9/29
-Active sensors: 2/99. Monitored targets: 4/29
-Active sensors: 2/99. Monitored targets: 3/29

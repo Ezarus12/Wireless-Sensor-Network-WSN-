@@ -1,4 +1,4 @@
-
+import matplotlib as plt
 class Summary:
     def __init__(self, sNum, sRange, tNum=None):
         self.sensorNum = sNum
