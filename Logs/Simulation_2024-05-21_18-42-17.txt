@@ -1,0 +1,8 @@
+Subset:1
+Active sensors: 8/136. Monitored targets: 9/10
+Subset:2
+Active sensors: 5/136. Monitored targets: 5/10
+Subset:3
+Active sensors: 5/136. Monitored targets: 5/10
+Subset:4
+Active sensors: 1/136. Monitored targets: 1/10

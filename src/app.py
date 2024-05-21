@@ -12,6 +12,7 @@ import math
 
 #***********   TO DO  ***************#
 #1. Change inplace style to variables
+#2. Add window icons
 
 
 #Variables
