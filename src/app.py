@@ -53,6 +53,7 @@ class Window(QMainWindow):
         # Variables
         self.activeSensorsGraph = []
         self.monitoredAreaGraph = []
+        self.monitoredTargetsGraph = []
 
         # Creating widgets
         self.create_widgets(stylesheet, buttonStylesheet)
@@ -84,8 +85,12 @@ class Window(QMainWindow):
         self.targetSlider.valueChanged.connect(lambda value: self.update_label(self.targetSliderNum, value))
 
     def graphWindow(self):
-        self.second_window = GraphWindow(self.activeSensorsGraph, self.monitoredAreaGraph, self.subset)
-        self.second_window.show()
+        if self.network_display.simulationMode == 'A':
+            self.second_window = GraphWindow(self.activeSensorsGraph, self.monitoredAreaGraph, self.subset, self.network_display.simulationMode)
+            self.second_window.show()
+        elif self.network_display.simulationMode == 'T':
+            self.second_window = GraphWindow(self.activeSensorsGraph, self.monitoredTargetsGraph, self.subset, self.network_display.simulationMode)
+            self.second_window.show()          
 
     #Creating toolbar
     def create_toolbar(self):
@@ -414,11 +419,15 @@ class Window(QMainWindow):
 
     #Reset the simulation parameters and generate new terrain scene
     def reset(self):
+        #Reset graph variables
         self.activeSensorsGraph = []
         self.monitoredAreaGraph = []
+        self.monitoredTargetsGraph = []
+        #Turn off UI
         self.changeUIstateAllowReset(False)
         self.progressBar.setValue(100)
         self.network_display.ResetSensors(self.numberSlider.value(), self.rangeSlider.value(), self.targetSlider.value())
+        #Turn on UI
         self.changeUIstateAllowReset(True)
 
     def draw_network(self):
@@ -477,11 +486,21 @@ class Window(QMainWindow):
     #Format data for the graph
     def formatDataGraph(self):
         activeSensorNum = 0
+        #Count active sensors
         for sensor in self.network_display.sensors:
             if sensor.isActive:
                     activeSensorNum += 1
         self.activeSensorsGraph.append(activeSensorNum)
-        self.monitoredAreaGraph.append(activeSensorNum*(self.network_display.sensorRange/2)**2 * 3.14/10000)
+        if self.network_display.simulationMode == 'A':
+            #Calculate total monitored area
+            self.monitoredAreaGraph.append(activeSensorNum*(self.network_display.sensorRange/2)**2 * 3.14/10000)
+        elif self.network_display.simulationMode == 'T':
+            monitoredTargetsNum = 0
+            #Count monitored targets
+            for target in self.network_display.targets:
+                if target.monitored:
+                    monitoredTargetsNum += 1
+            self.monitoredTargetsGraph.append(monitoredTargetsNum)
         
 
     #Perform the simulation and decrease battery from 100 to 0 for every subset
@@ -512,8 +531,9 @@ class Window(QMainWindow):
             summary = Summary(self.network_display.sensorNum, self.network_display.sensorRange)
             summary.simulation_log_message_area(self.network_display.sensors, fileName, self.subset)
         elif self.network_display.simulationMode == "T":
-           summary = Summary(self.network_display.sensorNum, self.network_display.sensorRange, self.network_display.targetNum)
-           summary.simulation_log_message_target(self.network_display.sensors, self.network_display.targets, fileName, self.subset)
+            self.formatDataGraph()
+            summary = Summary(self.network_display.sensorNum, self.network_display.sensorRange, self.network_display.targetNum)
+            summary.simulation_log_message_target(self.network_display.sensors, self.network_display.targets, fileName, self.subset)
         else:
             print("Error: Incorrect simulation mode.", "Mode must be \"Target\" or \"Area\"")
         self.timer.timeout.connect(lambda: self.decreaseBatteryLife(fileName))
