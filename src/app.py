@@ -1,4 +1,5 @@
 import sys
+import os
 from PyQt5.QtCore import QFile, Qt, QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView, QToolBar, QAction, QProgressBar, QMessageBox, QAction, QDialog, QVBoxLayout, QCheckBox
 from PyQt5.QtGui import QFont, QIcon
@@ -11,12 +12,6 @@ import math
 
 #***********   TO DO  ***************#
 #1. Change inplace style to variables
-#2. Add font loading check
-#3. Add graph
-#4. Comments
-#5. Add summary file creation
-
-
 
 
 #Variables
@@ -54,6 +49,12 @@ class Window(QMainWindow):
         self.activeSensorsGraph = []
         self.monitoredAreaGraph = []
         self.monitoredTargetsGraph = []
+
+        #Font
+        self.font = "Rubik.ttf"
+        if not os.path.isfile(self.font):
+            print("Failed to open font file")
+
 
         # Creating widgets
         self.create_widgets(stylesheet, buttonStylesheet)
@@ -180,22 +181,22 @@ class Window(QMainWindow):
 
         #Resize title and intials
         self.titleText.resize(math.floor(width*0.2), math.floor(height*0.02))
-        self.titleText.setFont(QFont("Rubik.tff", math.floor(width*0.2/21)))
+        self.titleText.setFont(QFont(self.font, math.floor(width*0.2/21)))
         self.titleText.move(math.floor(width*0.01),math.floor(height*0.02))
 
         self.initials.resize(math.floor(width*0.2), math.floor(height*0.016))
-        self.initials.setFont(QFont("Rubik.tff", math.floor(width*0.2/32)))
+        self.initials.setFont(QFont(self.font, math.floor(width*0.2/32)))
         self.initials.move(math.floor(width*0.01),math.floor(height*0.048))
 
         #Resize sliders
 
         #Number slider
         self.numberSliderName.resize(math.floor(width*0.2), math.floor(height*0.025))
-        self.numberSliderName.setFont(QFont("Rubik.tff", math.floor(width*0.2/16)))
+        self.numberSliderName.setFont(QFont(self.font, math.floor(width*0.2/16)))
         self.numberSliderName.move(math.floor(width*0.01),math.floor(height*0.1))
 
         self.numberSliderNum.resize(math.floor(width*0.08), math.floor(height*0.05))
-        self.numberSliderNum.setFont(QFont("Rubik.tff", math.floor(width*0.2/16)))
+        self.numberSliderNum.setFont(QFont(self.font, math.floor(width*0.2/16)))
         self.numberSliderNum.move(math.floor(width*0.16),math.floor(height*0.089))
 
         self.numberSlider.resize(math.floor(width*0.2), math.floor(height*0.04))
@@ -203,11 +204,11 @@ class Window(QMainWindow):
 
         #Range slider
         self.rangeSliderName.resize(math.floor(width*0.2), math.floor(height*0.04))
-        self.rangeSliderName.setFont(QFont("Rubik.tff", math.floor(width*0.2/16)))
+        self.rangeSliderName.setFont(QFont(self.font, math.floor(width*0.2/16)))
         self.rangeSliderName.move(math.floor(width*0.01),math.floor(height*0.23))
 
         self.rangeSliderNum.resize(math.floor(width*0.05), math.floor(height*0.05))
-        self.rangeSliderNum.setFont(QFont("Rubik.tff", math.floor(width*0.2/16)))
+        self.rangeSliderNum.setFont(QFont(self.font, math.floor(width*0.2/16)))
         self.rangeSliderNum.move(math.floor(width*0.118),math.floor(height*0.226))
 
         self.rangeSlider.resize(math.floor(width*0.2), math.floor(height*0.04))
@@ -215,11 +216,11 @@ class Window(QMainWindow):
 
         #Target slider
         self.targetSliderName.resize(math.floor(width*0.2), math.floor(height*0.04))
-        self.targetSliderName.setFont(QFont("Rubik.tff", math.floor(width*0.2/16)))
+        self.targetSliderName.setFont(QFont(self.font, math.floor(width*0.2/16)))
         self.targetSliderName.move(math.floor(width*0.01),math.floor(height*0.37))
 
         self.targetSliderNum.resize(math.floor(width*0.05), math.floor(height*0.05))
-        self.targetSliderNum.setFont(QFont("Rubik.tff", math.floor(width*0.2/16)))
+        self.targetSliderNum.setFont(QFont(self.font, math.floor(width*0.2/16)))
         self.targetSliderNum.move(math.floor(width*0.073),math.floor(height*0.365))
 
         self.targetSlider.resize(math.floor(width*0.2), math.floor(height*0.04))
@@ -236,16 +237,16 @@ class Window(QMainWindow):
         #Inactive sensors
         self.inactiveSensors.resize(math.floor(width*0.16), math.floor(height*0.1))
         self.inactiveSensors.move(math.floor(width*0.26),math.floor(height*0.06))
-        self.inactiveSensors.setFont(QFont("Rubik.tff", math.floor(width*0.2/16)))
+        self.inactiveSensors.setFont(QFont(self.font, math.floor(width*0.2/16)))
 
         self.inactiveSensorsNum.resize(math.floor(width*0.05), math.floor(height*0.1))
         self.inactiveSensorsNum.move(math.floor(width*0.393), math.floor(height*0.06))
-        self.inactiveSensorsNum.setFont(QFont("Rubik.tff", math.floor(width*0.2/16)))
+        self.inactiveSensorsNum.setFont(QFont(self.font, math.floor(width*0.2/16)))
 
         #Progress Bar
         self.progressBarName.resize(math.floor(width*0.2), math.floor(height*0.1))
         self.progressBarName.move(math.floor(width*0.25),math.floor(height*0.50))
-        self.progressBarName.setFont(QFont("Rubik.tff", math.floor(width*0.2/16)))
+        self.progressBarName.setFont(QFont(self.font, math.floor(width*0.2/16)))
 
         self.progressBar.resize(math.floor(width*0.2), math.floor(height*0.1))
         self.progressBar.move(math.floor(width*0.25),math.floor(height*0.60))
@@ -253,7 +254,7 @@ class Window(QMainWindow):
         #Simulation mode
         self.modeName.resize(math.floor(width*0.13), math.floor(height*0.1))
         self.modeName.move(math.floor(width*0.29),math.floor(height*0.15))
-        self.modeName.setFont(QFont("Rubik.tff", math.floor(width*0.2/16)))
+        self.modeName.setFont(QFont(self.font, math.floor(width*0.2/16)))
 
         self.targetButton.resize(math.floor(width*0.2), math.floor(height*0.1))
         self.targetButton.move(math.floor(width*0.25), math.floor(height*0.25))
@@ -276,13 +277,13 @@ class Window(QMainWindow):
         #App name
         self.titleText = QLabel(self.centralwidget)
         self.titleText.setText("Wireless Sensor Network (WSN)")
-        self.titleText.setFont(QFont("Rubik.tff", 20))
+        self.titleText.setFont(QFont(self.font, 20))
         self.titleText.setGeometry(QtCore.QRect(20, 10, 420, 61))
         self.titleText.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
         self.initials = QLabel(self.centralwidget)
         self.initials.setText("Filip Dabrowski")
-        self.initials.setFont(QFont("Rubik.tff", 18))
+        self.initials.setFont(QFont(self.font, 18))
         self.initials.setGeometry(QtCore.QRect(0, 0, 360, 30))
         self.initials.setStyleSheet(str(stylesheet, encoding='utf-8'))
         self.initials.setStyleSheet("color: white;")
@@ -315,13 +316,13 @@ class Window(QMainWindow):
         self.numberSliderName = QLabel(self.centralwidget)
         self.numberSliderName.setGeometry(QtCore.QRect(20, 220, 351, 61))
         self.numberSliderName.setText("Number of sensors:")
-        self.numberSliderName.setFont(QFont("Rubik.tff", 24))
+        self.numberSliderName.setFont(QFont(self.font, 24))
         self.numberSliderName.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
         #Number slider num
         self.numberSliderNum = QLabel(self.centralwidget)
         self.numberSliderNum.setText("30")
-        self.numberSliderNum.setFont(QFont("Rubik.tff", 24))
+        self.numberSliderNum.setFont(QFont(self.font, 24))
         self.numberSliderNum.setGeometry(QtCore.QRect(110, 340, 141, 61))
         self.numberSliderNum.setStyleSheet(str(stylesheet, encoding='utf-8'))
         self.numberSliderNum.setStyleSheet("color: white;")
@@ -339,14 +340,14 @@ class Window(QMainWindow):
         self.rangeSliderName = QLabel(self.centralwidget)
         self.rangeSliderName.setGeometry(QtCore.QRect(30, 430, 351, 61))
         self.rangeSliderName.setText("Sensor range:")
-        self.rangeSliderName.setFont(QFont("Rubik.tff", 24))
+        self.rangeSliderName.setFont(QFont(self.font, 24))
         self.rangeSliderName.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
         #Range slider num
         self.rangeSliderNum = QLabel(self.centralwidget)
         self.rangeSliderNum.setGeometry(QtCore.QRect(120, 580, 141, 61))
         self.rangeSliderNum.setText("10")
-        self.rangeSliderNum.setFont(QFont("Rubik.tff", 32))
+        self.rangeSliderNum.setFont(QFont(self.font, 32))
         self.rangeSliderNum.setStyleSheet(str(stylesheet, encoding='utf-8'))
         self.rangeSliderNum.setStyleSheet("color: white;")
 
@@ -363,14 +364,14 @@ class Window(QMainWindow):
         self.targetSliderName = QLabel(self.centralwidget)
         self.targetSliderName.setGeometry(QtCore.QRect(30, 430, 351, 61))
         self.targetSliderName.setText("Targets:")
-        self.targetSliderName.setFont(QFont("Rubik.tff", 24))
+        self.targetSliderName.setFont(QFont(self.font, 24))
         self.targetSliderName.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
         #Target slider num
         self.targetSliderNum = QLabel(self.centralwidget)
         self.targetSliderNum.setGeometry(QtCore.QRect(120, 580, 141, 61))
         self.targetSliderNum.setText("10")
-        self.targetSliderNum.setFont(QFont("Rubik.tff", 32))
+        self.targetSliderNum.setFont(QFont(self.font, 32))
         self.targetSliderNum.setStyleSheet(str(stylesheet, encoding='utf-8'))
         self.targetSliderNum.setStyleSheet("color: white;")
 
@@ -378,14 +379,14 @@ class Window(QMainWindow):
         self.inactiveSensors = QLabel(self.centralwidget)
         self.inactiveSensors.setGeometry(QtCore.QRect(500, 80, 350, 60))
         self.inactiveSensors.setText("Inactive Sensors:")
-        self.inactiveSensors.setFont(QFont("Rubik.tff", 24))
+        self.inactiveSensors.setFont(QFont(self.font, 24))
         self.inactiveSensors.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
         #Inactive sensors num
         self.inactiveSensorsNum = QLabel(self.centralwidget)
         self.inactiveSensorsNum.setGeometry(QtCore.QRect(760, 82, 60, 60))
         self.inactiveSensorsNum.setText("0")
-        self.inactiveSensorsNum.setFont(QFont("Rubik.tff", 24))
+        self.inactiveSensorsNum.setFont(QFont(self.font, 24))
         self.inactiveSensorsNum.setStyleSheet(str(stylesheet, encoding='utf-8'))
         self.inactiveSensorsNum.setStyleSheet("color: white;")
 
@@ -393,7 +394,7 @@ class Window(QMainWindow):
         self.progressBarName = QLabel(self.centralwidget)
         self.progressBarName.setGeometry(QtCore.QRect(400, 530, 351, 61))
         self.progressBarName.setText("Sensors battery life")
-        self.progressBarName.setFont(QFont("Rubik.tff", 24))
+        self.progressBarName.setFont(QFont(self.font, 24))
         self.progressBarName.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
         self.progressBar = QProgressBar(self.centralwidget)
@@ -406,7 +407,7 @@ class Window(QMainWindow):
         self.modeName = QLabel(self.centralwidget)
         self.modeName.setGeometry(QtCore.QRect(540, 210, 351, 61))
         self.modeName.setText("Simulation mode")
-        self.modeName.setFont(QFont("Rubik.tff", 24))
+        self.modeName.setFont(QFont(self.font, 24))
         self.modeName.setStyleSheet(str(stylesheet, encoding='utf-8'))
 
         self.targetButton = QPushButton("Target", self.centralwidget)
