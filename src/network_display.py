@@ -18,14 +18,14 @@ class NetworkDisplay:
         self.simulationMode = '' # [A] - For area coverage and [T] - For target coverage
         self.targetNum = 10
         self.monitoringAnyTarget = False
-        self.visualizeSensorsComunnication = False
+        self.visualizeSensorsCommunication = False
         self.delayVSN = False
         # Representation of sensors
         self.sensors = []
         self.targets = []
         graphics_view.setScene(self.scene)
         # Load terrain image
-        self.terrain_image = QPixmap("terrain_image.jpg")
+        self.terrain_image = QPixmap("Images/terrain_image.jpg")
         if self.terrain_image.isNull():
             print("Error: Failed to load terrain image")
             return
@@ -86,7 +86,7 @@ class NetworkDisplay:
                         self.inactive_sensors += 1
                         sensor.isActive = False
                         sensor.change_color_inactive()
-                    if self.visualizeSensorsComunnication:
+                    if self.visualizeSensorsCommunication:
                         self.visualizeNetwork(sensor, other_sensor)
 
 

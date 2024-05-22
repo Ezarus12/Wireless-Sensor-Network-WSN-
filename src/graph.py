@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QPushButton
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget
+from PyQt5.QtGui import QIcon
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
@@ -94,6 +95,7 @@ class GraphWindow(QMainWindow):
     def __init__(self, active_sensors, monitored, subset_count, simulation_mode):
         super().__init__()
         self.setWindowTitle('Simulation results')
+        self.setWindowIcon(QIcon("Images/logo.png"))
         self.setGeometry(300, 300, 800, 600)
         self.setStyleSheet("QMainWindow {background-color: #252525; color: white;}")
 

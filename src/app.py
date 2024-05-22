@@ -10,11 +10,6 @@ from datetime import datetime
 from graph import GraphWindow
 import math
 
-#***********   TO DO  ***************#
-#1. Change inplace style to variables
-#2. Add window icons
-
-
 #Variables
 windowHeight = 1080
 windowWidth = 1920
@@ -25,6 +20,7 @@ class Window(QMainWindow):
         super().__init__() #initializing parent object
     
         self.setWindowTitle("Wireless Sensor Network") # Setting window title
+        self.setWindowIcon(QIcon("Images/logo.png"))
         self.setStyleSheet("background:#252525") # Changing the background color
         self.setGeometry(320, 180, windowWidth, windowHeight) # Defining window position and resolution
 
@@ -77,8 +73,10 @@ class Window(QMainWindow):
         self.startButton.clicked.connect(lambda: self.startSimulation())
 
         self.targetButton.clicked.connect(lambda: self.changeSimulationMode("Target", stylesheet, buttonStylesheet))
+        self.targetButton.clicked.connect(lambda: self.reset()) #Reset WSN when changing simulation mode
         
         self.areaButton.clicked.connect(lambda: self.changeSimulationMode("Area", stylesheet, buttonStylesheet))
+        self.areaButton.clicked.connect(lambda: self.reset()) #Reset WSN when changing simulation mode
 
         self.numberSlider.valueChanged.connect(lambda value: self.update_label(self.numberSliderNum, value))
         
@@ -100,10 +98,8 @@ class Window(QMainWindow):
         self.addToolBar(toolbar)
         Settings = QAction(QIcon("setting.png"), "Settings", self)
         Settings.triggered.connect(self.open_settings_window)
-        toolbar.setStyleSheet("background-color: gray;")
-        Edit = QAction("Edit", self)
+        toolbar.setStyleSheet("background-color: #4F4F4F;")
         toolbar.addAction(Settings)
-        toolbar.addAction(Edit)
 
     #Open setting window containing additional parameters
     def open_settings_window(self):
@@ -121,7 +117,7 @@ class Window(QMainWindow):
         #Checkbox for visualizing sensors communication (VSN)
         checkboxVSN = QCheckBox("Visualize Sensors Comunnication")
         checkboxVSN.setStyleSheet("color: white;")
-        if (self.network_display.visualizeSensorsComunnication):
+        if (self.network_display.visualizeSensorsCommunication):
             checkboxVSN.setChecked(True)
         else:
             checkboxVSN.setChecked(False)
@@ -163,9 +159,9 @@ class Window(QMainWindow):
         self.network_display.set_detectionRange(range.value())
 
         if checkboxVSN.isChecked():
-            self.network_display.visualizeSensorsComunnication = True
+            self.network_display.visualizeSensorsCommunication = True
         else:
-            self.network_display.visualizeSensorsComunnication = False
+            self.network_display.visualizeSensorsCommunication = False
 
         if checkboxDelay.isChecked():
             self.network_display.delayVSN = True
@@ -512,6 +508,7 @@ class Window(QMainWindow):
         if not self.network_display.sensors:
             message_box = QMessageBox()
             message_box.setWindowTitle("Cannot start the simulation")
+            message_box.setWindowIcon(QIcon("Images/logo.png"))
             message_box.setText("All of the sensors ran out of their battery")
             message_box.setStyleSheet("QMessageBox { background-color: #333333; } QMessageBox QLabel { color: white; }")
             message_box.exec_()
@@ -520,6 +517,7 @@ class Window(QMainWindow):
         if not self.network_display.monitoringAnyTarget and self.network_display.simulationMode == 'T':
             message_box = QMessageBox()
             message_box.setWindowTitle("Cannot start the simulation")
+            message_box.setWindowIcon(QIcon("Images/logo.png"))
             message_box.setText("None of the targets is being monitored")
             message_box.setStyleSheet("QMessageBox { background-color: #333333; } QMessageBox QLabel { color: white; }")
             message_box.exec_()
@@ -546,7 +544,7 @@ class Window(QMainWindow):
         if mode == "Target":
             self.network_display.simulationMode = 'T'
             self.network_display.delayVSN = False
-            self.network_display.visualizeNetwork = False
+            self.network_display.visualizeSensorsCommunication = False
             self.targetButton.setStyleSheet(str(stylesheet, encoding='utf-8')) 
             self.areaButton.setStyleSheet(str(buttonStylesheet, encoding='utf-8'))
         elif mode == "Area":
