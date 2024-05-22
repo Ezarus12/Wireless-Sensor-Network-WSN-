@@ -1,8 +1,0 @@
-Subset:1
-Active sensors: 18/97. Monitored targets: 29/34
-Subset:2
-Active sensors: 14/97. Monitored targets: 19/34
-Subset:3
-Active sensors: 10/97. Monitored targets: 13/34
-Subset:4
-Active sensors: 3/97. Monitored targets: 3/34
