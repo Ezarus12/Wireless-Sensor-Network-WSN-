@@ -1,6 +1,0 @@
-Subset:1
-Active sensors: 34/40. Monitored area: 26.69%
-Subset:2
-Active sensors: 5/40. Monitored area: 3.925%
-Subset:3
-Active sensors: 1/40. Monitored area: 0.785%
