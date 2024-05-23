@@ -96,7 +96,7 @@ class GraphWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle('Simulation results')
         self.setWindowIcon(QIcon("Images/logo.png"))
-        self.setGeometry(300, 300, 800, 600)
+        self.setGeometry(810, 390, 800, 600)
         self.setStyleSheet("QMainWindow {background-color: #252525; color: white;}")
 
         central_widget = QWidget(self)

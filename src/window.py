@@ -1,7 +1,6 @@
-import sys
 import os
 from PyQt5.QtCore import QFile, Qt, QTimer
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView, QToolBar, QAction, QProgressBar, QMessageBox, QAction, QDialog, QVBoxLayout, QCheckBox
+from PyQt5.QtWidgets import QMainWindow, QLabel, QSlider, QWidget, QPushButton, QGraphicsView, QToolBar, QAction, QProgressBar, QMessageBox, QAction, QDialog, QVBoxLayout, QCheckBox
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5 import QtCore, QtWidgets
 from network_display import NetworkDisplay
@@ -555,8 +554,4 @@ class Window(QMainWindow):
             print("Mode must be \"Target\" or \"Area\"")
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = Window()
-    window.show()
-    sys.exit(app.exec_())
+
