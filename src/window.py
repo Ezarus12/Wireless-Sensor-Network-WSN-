@@ -157,11 +157,13 @@ class Window(QMainWindow):
 
         self.network_display.set_detectionRange(range.value())
 
+        #VSN
         if checkboxVSN.isChecked():
             self.network_display.visualizeSensorsCommunication = True
         else:
             self.network_display.visualizeSensorsCommunication = False
-
+            
+        #Delay
         if checkboxDelay.isChecked():
             self.network_display.delayVSN = True
         else:
