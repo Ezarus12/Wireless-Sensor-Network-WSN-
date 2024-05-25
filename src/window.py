@@ -83,14 +83,6 @@ class Window(QMainWindow):
         
         self.targetSlider.valueChanged.connect(lambda value: self.update_label(self.targetSliderNum, value))
 
-    def graphWindow(self):
-        if self.network_display.simulationMode == 'A':
-            self.second_window = GraphWindow(self.activeSensorsGraph, self.monitoredAreaGraph, self.subset, self.network_display.simulationMode)
-            self.second_window.show()
-        elif self.network_display.simulationMode == 'T':
-            self.second_window = GraphWindow(self.activeSensorsGraph, self.monitoredTargetsGraph, self.subset, self.network_display.simulationMode)
-            self.second_window.show()          
-
     #Creating toolbar
     def create_toolbar(self):
         toolbar = QToolBar()
@@ -260,7 +252,6 @@ class Window(QMainWindow):
         self.areaButton.resize(math.floor(width*0.2), math.floor(height*0.1))
         self.areaButton.move(math.floor(width*0.25), math.floor(height*0.37)) 
         
-
     #Create all of the scene widgets and add them to the layout
     def create_widgets(self, stylesheet, buttonStylesheet):
         #Creating app name widget
@@ -481,7 +472,6 @@ class Window(QMainWindow):
         fileName = "Simulation_" + datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".txt"
         self.startBatteryDecrease(fileName)
 
-
     #Format data for the graph
     def formatDataGraph(self):
         activeSensorNum = 0
@@ -500,8 +490,15 @@ class Window(QMainWindow):
                 if target.monitored:
                     monitoredTargetsNum += 1
             self.monitoredTargetsGraph.append(monitoredTargetsNum)
-        
 
+    def graphWindow(self):
+        if self.network_display.simulationMode == 'A':
+            self.second_window = GraphWindow(self.activeSensorsGraph, self.monitoredAreaGraph, self.subset, self.network_display.simulationMode)
+            self.second_window.show()
+        elif self.network_display.simulationMode == 'T':
+            self.second_window = GraphWindow(self.activeSensorsGraph, self.monitoredTargetsGraph, self.subset, self.network_display.simulationMode)
+            self.second_window.show()          
+            
     #Perform the simulation and decrease battery from 100 to 0 for every subset
     def startBatteryDecrease(self, fileName):
         #disable UI interactive widgets:

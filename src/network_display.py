@@ -40,8 +40,6 @@ class NetworkDisplay:
         if self.simulationMode == 'T':
             self.generateTargets(self.targetNum)
 
-
-
         for i in range(self.sensorNum):
             sensorX = random.randint(math.floor(self.sensorRange*0.5), math.floor(990-self.sensorRange*0.5))
             sensorY = random.randint(math.floor(self.sensorRange*0.5), math.floor(990-self.sensorRange*0.5))
