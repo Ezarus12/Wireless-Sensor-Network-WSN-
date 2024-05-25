@@ -3,37 +3,38 @@ from PyQt5.QtGui import QIcon
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-class GraphArea(FigureCanvas):
-    def __init__(self, parent=None, active_sensors=None, monitored_area=None, subset_count=0):
+class GraphBase(FigureCanvas):
+    def __init__(self, parent=None, activeSensors=None, monitoredData=None, subsetCount=0, title='', xlabel='', ylabel=''):
         super().__init__(Figure(figsize=(6, 4), facecolor="#333333"))
         self.setParent(parent)
-        self.active_sensors = active_sensors
-        self.monitored_area = monitored_area
-        self.subset_count = subset_count
+        self.activeSensors = activeSensors
+        self.monitoredData = monitoredData
+        self.subsetCount = subsetCount
+        self.title = title
+        self.xlabel = xlabel
+        self.ylabel = ylabel
         self.plot()
 
     def plot(self):
-        if self.active_sensors is None or self.monitored_area is None:
+        #Return if the data does not exist
+        if not self.activeSensors or  not self.monitoredData:
+            print("Data necessary for the graph does not exist")
             return
         
         ax = self.figure.add_subplot(111)
         ax.clear()
 
-        # Creating graph
-        x_values = range(1, self.subset_count + 1)  # Tworzenie listy wartości dla osi X
-        ax.plot(x_values, self.active_sensors, label='Active sensors', marker='o', color='#017365')
-        ax.plot(x_values, self.monitored_area, label='Monitored area (%)', marker='o', color='red')  
+        x_values = range(1, self.subsetCount + 1)
+        ax.plot(x_values, self.activeSensors, label='Active', marker='o', color='#017365')
+        ax.plot(x_values, self.monitoredData, label='Monitored', marker='o', color='red')
 
-        ax.set_xlabel('Subsets', color='white')
-        ax.set_ylabel('Values', color='white')
-        ax.set_title('Active sensors and monitored area', color='white')
+        ax.set_xlabel(self.xlabel, color='white')
+        ax.set_ylabel(self.ylabel, color='white')
+        ax.set_title(self.title, color='white')
         ax.legend(loc='upper right', fontsize='small', facecolor='black', edgecolor='white', labelcolor='white')
         ax.set_xticks(x_values)
         
-        # Background color
         ax.set_facecolor('#252525')
-
-        # Ticks and spines colors
         ax.tick_params(axis='x', colors='white')
         ax.tick_params(axis='y', colors='white')
         ax.spines['bottom'].set_color('#017365')
@@ -43,56 +44,16 @@ class GraphArea(FigureCanvas):
 
         self.draw()
 
-    def set_subset_count(self, subset_count):
-        self.subset_count = subset_count
-        self.plot()
+class GraphArea(GraphBase):
+    def __init__(self, parent=None, activeSensors=None, monitoredData=None, subsetCount=0):
+        super().__init__(parent, activeSensors, monitoredData, subsetCount, 'Active sensors and monitored area', 'Subsets', 'Values')
 
-class GraphTarget(FigureCanvas):
-    def __init__(self, parent=None, active_sensors=None, monitored_targets=None, subset_count=0):
-        super().__init__(Figure(figsize=(6, 4), facecolor="#333333"))
-        self.setParent(parent)
-        self.active_sensors = active_sensors
-        self.monitored_area = monitored_targets
-        self.subset_count = subset_count
-        self.plot()
-
-    def plot(self):
-        if self.active_sensors is None or self.monitored_area is None:
-            return
-        
-        ax = self.figure.add_subplot(111)
-        ax.clear()
-
-        # Creating graph
-        x_values = range(1, self.subset_count + 1)  # Tworzenie listy wartości dla osi X
-        ax.plot(x_values, self.active_sensors, label='Active sensors', marker='o', color='#017365')
-        ax.plot(x_values, self.monitored_area, label='Monitored Targets', marker='o', color='red')  
-
-        ax.set_xlabel('Subsets', color='white')
-        ax.set_ylabel('Values', color='white')
-        ax.set_title('Active sensors and monitored targets', color='white')
-        ax.legend(loc='upper right', fontsize='small', facecolor='black', edgecolor='white', labelcolor='white')
-        ax.set_xticks(x_values)
-        
-        # Background color
-        ax.set_facecolor('#252525')
-
-        # Ticks and spines colors
-        ax.tick_params(axis='x', colors='white')
-        ax.tick_params(axis='y', colors='white')
-        ax.spines['bottom'].set_color('#017365')
-        ax.spines['left'].set_color('#017365')
-        ax.spines['top'].set_color('#017365')
-        ax.spines['right'].set_color('#017365')
-
-        self.draw()
-        
-    def set_subset_count(self, subset_count):
-        self.subset_count = subset_count
-        self.plot()
+class GraphTarget(GraphBase):
+    def __init__(self, parent=None, activeSensors=None, monitoredData=None, subsetCount=0):
+        super().__init__(parent, activeSensors, monitoredData, subsetCount, 'Active sensors and monitored targets', 'Subsets', 'Values')
 
 class GraphWindow(QMainWindow):
-    def __init__(self, active_sensors, monitored, subset_count, simulation_mode):
+    def __init__(self, activeSensors, monitored, subsetCount, simulation_mode):
         super().__init__()
         self.setWindowTitle('Simulation results')
         self.setWindowIcon(QIcon("Images/logo.png"))
@@ -104,8 +65,8 @@ class GraphWindow(QMainWindow):
 
         layout = QVBoxLayout(central_widget)
         if simulation_mode == 'A':
-            self.plot_canvas = GraphArea(self, active_sensors, monitored, subset_count)
+            self.plot_canvas = GraphArea(self, activeSensors, monitored, subsetCount)
             layout.addWidget(self.plot_canvas)
         elif simulation_mode == 'T':
-            self.plot_canvas = GraphTarget(self, active_sensors, monitored, subset_count)
+            self.plot_canvas = GraphTarget(self, activeSensors, monitored, subsetCount)
             layout.addWidget(self.plot_canvas)

@@ -25,15 +25,15 @@ class Sensor(QGraphicsEllipseItem):
 
     def change_color_inactive(self):
         self.setBrush(QBrush(QColor(105, 105, 105)))  # Sensor color
-        self.range_area.setBrush(QBrush(QColor(3, 57, 51, self.rangeAreaOpacity)))
+        self.range_area.setBrush(QBrush(QColor(3, 57, 51, self.rangeAreaOpacity))) # Range area color
 
     def change_color_active(self):
         self.setBrush(QBrush(QColor(14, 236, 210)))  # Sensor color
-        self.range_area.setBrush(QBrush(QColor(32, 179, 162, self.rangeAreaOpacity)))
+        self.range_area.setBrush(QBrush(QColor(32, 179, 162, self.rangeAreaOpacity))) # Range area color
 
     def change_color_off(self):
         self.setBrush(QBrush(QColor(85, 85, 85)))  # Sensor color
-        self.range_area.setBrush(QBrush(QColor(3, 57, 51, 0)))
+        self.range_area.setBrush(QBrush(QColor(3, 57, 51, 0))) # Range area color
 
     #Fade the sensor's area by the given percentage (Lower the opacity)
     # value (int): percentage value to fade the area
