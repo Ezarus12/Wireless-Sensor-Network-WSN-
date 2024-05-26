@@ -1,0 +1,4 @@
+Subset:1
+Active sensors: 3/30. Monitored targets: 3/10
+Subset:2
+Active sensors: 1/30. Monitored targets: 1/10
