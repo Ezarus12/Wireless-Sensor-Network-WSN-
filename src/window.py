@@ -86,11 +86,11 @@ class Window(QMainWindow):
     #Creating toolbar
     def create_toolbar(self):
         toolbar = QToolBar()
-        self.addToolBar(toolbar)
-        Settings = QAction(QIcon("setting.png"), "Settings", self)
+        Settings = QAction(QIcon("Images/setting.png"), "Settings", self)
         Settings.triggered.connect(self.open_settings_window)
         toolbar.setStyleSheet("background-color: #4F4F4F;")
         toolbar.addAction(Settings)
+        self.addToolBar(toolbar)
 
     #Open setting window containing additional parameters
     def open_settings_window(self):
@@ -122,7 +122,7 @@ class Window(QMainWindow):
             checkboxDelay.setChecked(False)  
 
         #Sensor detaction range
-        name = QLabel("Sensor's detection range")
+        name = QLabel("Sensor's communication range")
         name.setStyleSheet("color: white;")
         range = QSlider(Qt.Horizontal)
         range.setMinimum(0)
@@ -448,7 +448,6 @@ class Window(QMainWindow):
                 self.progressBar.setValue(0)
                 #Enable Ui interactive widgets:
                 self.changeUIstate(True)
-
                 self.graphWindow()
     
     #Turn On or Off the UI widgets

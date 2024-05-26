@@ -79,7 +79,7 @@ class NetworkDisplay:
         for i, sensor in enumerate(self.sensors):
             for j, other_sensor in enumerate(self.sensors[i+1:], start=i+1):
                 distance = math.sqrt(((sensor.xPos - other_sensor.xPos) ** 2) + ((sensor.yPos - other_sensor.yPos) ** 2))
-                if distance <= self.detectionRange: #change to neightbaurs range
+                if distance <= self.detectionRange:
                     if distance <= (self.sensorRange / 2) and sensor.isActive and sensor.hasPower:
                         self.inactive_sensors += 1
                         sensor.isActive = False

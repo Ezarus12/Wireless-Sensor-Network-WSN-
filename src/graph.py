@@ -46,7 +46,7 @@ class GraphBase(FigureCanvas):
 
 class GraphArea(GraphBase):
     def __init__(self, parent=None, activeSensors=None, monitoredData=None, subsetCount=0):
-        super().__init__(parent, activeSensors, monitoredData, subsetCount, 'Active sensors and monitored area', 'Subsets', 'Values')
+        super().__init__(parent, activeSensors, monitoredData, subsetCount, 'Active sensors and monitored area [%]', 'Subsets', 'Values')
 
 class GraphTarget(GraphBase):
     def __init__(self, parent=None, activeSensors=None, monitoredData=None, subsetCount=0):

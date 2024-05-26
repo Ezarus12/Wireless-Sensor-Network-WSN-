@@ -6,10 +6,7 @@ class Summary:
         self.targetNum = tNum
 
         #Log message containing number of currently active sensors and percentage of monitored area
-
-    def create_log_file(self, name):
-        print("logfile")
-
+        
     def simulation_log_message_area(self, sensors, fileName, subset):
 
         with open("Logs/" + str(fileName), "a") as file:
