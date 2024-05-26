@@ -5,7 +5,7 @@ from PyQt5.QtGui import QColor
 
 
 # Add the /src directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 from sensor import Sensor
 
